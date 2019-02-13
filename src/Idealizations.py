@@ -3,11 +3,12 @@ Idealization Objects (skin, boom)
 """
 
 import numpy as np
+import unittest
 
 
 class Boom(object):
 
-    def __init__(self, mass: float, size: float, position: np.array):
+    def __init__(self, mass: float = 0, size: float = 0, position: np.array = np.array([0,0,0])):
         """
         Create a boom object
         :param mass: Mass of boom
@@ -40,7 +41,7 @@ class Boom(object):
 
 class StraightSkin(object):
 
-    def __init__(self, mass: float, thickness: float, startpos: np.array, endpos: np.array):
+    def __init__(self, mass: float = 0, thickness: float = 0, startpos: np.array = np.array([0, 0, 0]), endpos: np.array = np.array([0, 0, 0])):
         """
         Create a skin object (to connect booms)
         :param mass: Mass of skin
@@ -79,10 +80,16 @@ class StraightSkin(object):
         elif which == 'end':
             self.__end = position
 
+    def get_position(self, which='start'):
+        if which == 'start':
+            return self.__start
+        elif which == 'end':
+            return self.__end
+
 
 class CurvedSkin(object):
 
-    def __init__(self, mass: float, thickness: float, radius: float, angle: float, startpos: np.array):
+    def __init__(self, mass: float = 0, thickness: float = 0, radius: float = 0, startpos: np.array = np.array([0, 0, 0]), endpos: np.array = np.array([0, 0, 0])):
         """
         Create a curved skin object (to connect booms)
         :param mass: Mass of skin
@@ -94,8 +101,8 @@ class CurvedSkin(object):
         self.__mass = mass
         self.__t = thickness
         self.__r = radius
-        self.__theta = angle
-        self.__pos = startpos
+        self.__end = endpos
+        self.__start = startpos
 
     def get_mass(self):
         return self.__mass
@@ -109,20 +116,120 @@ class CurvedSkin(object):
     def set_thickness(self, t):
         self.__t = t
 
-    def get_angle(self):
-        return self.__theta
-
-    def set_angle(self, angle):
-        self.__theta = angle
-
     def get_radius(self):
         return self.__r
 
     def set_radius(self, radius):
         self.__r = radius
 
-    def get_position(self):
-        return self.__pos
+    def get_position(self, which='start'):
+        if which == 'start':
+            return self.__start
+        elif which == 'end':
+            return self.__end
 
-    def set_position(self, position):
-        self.__pos = position
+    def set_position(self, position, which='start'):
+        if which == 'start':
+            self.__start = position
+        elif which == 'end':
+            self.__end = position
+
+
+if __name__ == "__main__":
+
+    class TestCases(unittest.TestCase):
+
+        def setUp(self):
+            self.boom = Boom()
+            self.s_skin = StraightSkin()
+            self.c_skin = CurvedSkin()
+
+        def test_mass_setter_getter_methods(self):
+
+            #Initialized Masses should be 0
+            expected_masses = 0
+
+            boom_mass = self.boom.get_mass()
+            s_skin_mass = self.s_skin.get_mass()
+            c_skin_mass = self.c_skin.get_mass()
+
+            self.assertEqual(expected_masses, boom_mass)
+            self.assertEqual(expected_masses, s_skin_mass)
+            self.assertEqual(expected_masses, c_skin_mass)
+
+            #Set new masses
+            new_masses = [10, 3, 23]
+
+            self.boom.set_mass(new_masses[0])
+            self.s_skin.set_mass(new_masses[1])
+            self.c_skin.set_mass(new_masses[2])
+
+            boom_mass = self.boom.get_mass()
+            s_skin_mass = self.s_skin.get_mass()
+            c_skin_mass = self.c_skin.get_mass()
+
+            self.assertEqual(new_masses[0], boom_mass)
+            self.assertEqual(new_masses[1], s_skin_mass)
+            self.assertEqual(new_masses[2], c_skin_mass)
+
+        def test_position_setter_getter_methods(self):
+
+            #Initialized positions should be [0,0,0]
+            expected_position = np.array([0, 0, 0])
+
+            boom_pos = self.boom.get_position()
+            s_skin_pos = self.s_skin.get_position(which='start')
+            c_skin_pos = self.c_skin.get_position(which='start')
+
+            self.assertEqual(expected_position.all(), boom_pos.all())
+            self.assertEqual(expected_position.all(), s_skin_pos.all())
+            self.assertEqual(expected_position.all(), c_skin_pos.all())
+
+            #Set new positions
+            new_positions = [np.array([10, 3, 23]), np.array([4, 10, -4]), np.array([28, -1, -1000])]
+
+            self.boom.set_position(new_positions[0])
+            self.s_skin.set_position(new_positions[1], which='start')
+            self.c_skin.set_position(new_positions[2], which='start')
+
+            boom_pos = self.boom.get_position()
+            s_skin_pos = self.s_skin.get_position(which='start')
+            c_skin_pos = self.c_skin.get_position(which='start')
+
+            self.assertEqual(new_positions[0].all(), boom_pos.all())
+            self.assertEqual(new_positions[1].all(), s_skin_pos.all())
+            self.assertEqual(new_positions[2].all(), c_skin_pos.all())
+
+        def test_thickness_setter_getter_methods(self):
+
+            #Initialized thicknesses should be 0
+            expected_thicknesses = 0
+
+            boom_mass = self.boom.get_size()
+            s_skin_mass = self.s_skin.get_thickness()
+            c_skin_mass = self.c_skin.get_thickness()
+
+            self.assertEqual(expected_thicknesses, boom_mass)
+            self.assertEqual(expected_thicknesses, s_skin_mass)
+            self.assertEqual(expected_thicknesses, c_skin_mass)
+
+            #Set new masses
+            new_thicknesses = [110, -3, 233]
+
+            self.boom.set_size(new_thicknesses[0])
+            self.s_skin.set_thickness(new_thicknesses[1])
+            self.c_skin.set_thickness(new_thicknesses[2])
+
+            boom_mass = self.boom.get_mass()
+            s_skin_mass = self.s_skin.get_mass()
+            c_skin_mass = self.c_skin.get_mass()
+
+            self.assertEqual(new_thicknesses[0], boom_mass)
+            self.assertEqual(new_thicknesses[1], s_skin_mass)
+            self.assertEqual(new_thicknesses[2], c_skin_mass)
+
+    def run_TestCases():
+        suite = unittest.TestLoader().loadTestsFromTestCase(TestCases)
+        unittest.TextTestRunner(verbosity=2).run(suite)
+
+    run_TestCases()
