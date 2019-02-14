@@ -87,7 +87,6 @@ class Moment(object):
         self.__moment = magnitude * dirvec
 
 
-
 if __name__ == "__main__":
 
     class ForceMomentTestCases(unittest.TestCase):
