@@ -6,9 +6,10 @@ from src.Idealizations import *
 import matplotlib.pyplot as plt
 
 
+
 class AssembledStructure(object):
 
-    def __init__(self, *objects: "Booms or Skin" ):
+    def __init__(self, *objects: "Booms and/or Skin"):
 
         self.__objects = objects
         self.__structure = None
