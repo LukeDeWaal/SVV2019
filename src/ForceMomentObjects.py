@@ -2,11 +2,11 @@
 Create Force and moment objects here
 """
 import numpy as np
-
+import unittest
 
 class Force(object):
 
-    def __init__(self, forcevector: np.array, positionvector: np.array):
+    def __init__(self, forcevector: np.array = np.array([0,0,0]), positionvector: np.array = np.array([0,0,0])):
         """
         Object describing a force vector
         :param forcevector: Vector describing the magnitude and direction
@@ -45,7 +45,7 @@ class Force(object):
 
 class Moment(object):
 
-    def __init__(self, momentvector: np.array, positionvector: np.array):
+    def __init__(self, momentvector: np.array = np.array([0,0,0]), positionvector: np.array = np.array([0,0,0])):
         """
         Object describing a moment / torque
         :param momentvector: Vector describing the direction and magnitude
@@ -80,3 +80,64 @@ class Moment(object):
     def set_magnitude(self, magnitude):
         dirvec = self.get_direction()
         self.__moment = magnitude * dirvec
+
+
+
+if __name__ == "__main__":
+
+    class TestCases(unittest.TestCase):
+
+        def setUp(self):
+            self.F = Force()
+            self.M = Moment()
+
+        def test_position_getter_setter_methods(self):
+
+            expected_positions = np.array([0, 0, 0])
+
+            self.assertEqual(self.F.get_position().all(), expected_positions.all())
+            self.assertEqual(self.M.get_position().all(), expected_positions.all())
+
+            self.F.set_position(np.array([1,10,-3]))
+            self.M.set_position(np.array([-73, 10, 2]))
+
+            self.assertEqual(self.F.get_position().all(), np.array([1,10,-3]))
+            self.assertEqual(self.M.get_position().all(), np.array([-73, 10, 2]))
+
+        def test_vector_getter_setter_methods(self):
+
+            expected_vectors = np.array([0, 0, 0])
+
+            self.assertEqual(self.F.get_force().all(), expected_vectors)
+            self.assertEqual(self.M.get_moment().all(), expected_vectors)
+
+            self.F.set_force(np.array([10, -4, 3]))
+            self.M.set_moment(np.array([-2, 8, 12]))
+
+            self.assertEqual(self.F.get_force().all(), np.array([10, -4, 3]))
+            self.assertEqual(self.M.get_moment().all(), np.array([-2, 8, 12]))
+
+        def test_direction_getter_setter_methods(self):
+
+            expected_dirs = np.array([0, 0, 0])
+
+            self.assertEqual(self.F.get_direction(), expected_dirs)
+            self.assertEqual(self.M.get_direction(), expected_dirs)
+
+            self.F.set_force(np.array([-4, 3, -2]))
+            self.M.set_moment(np.array([5, -2, 1]))
+
+            F_dir = np.array([-4, 3, -2]) / np.linalg.norm(np.array([-4, 3, -2]))
+            M_dir = np.array([5, -2, 1]) / np.linalg.norm(np.array([5, -2, 1]))
+
+            self.assertAlmostEqual(self.F.get_direction().all(), F_dir.all())
+            self.assertAlmostEqual(self.M.get_direction().all(), M_dir.all())
+
+        def test_magnitude_getter_setter_methods(self):
+
+            expected_magnitudes = 0
+
+            self.assertEqual(self.F.get_magnitude(), expected_magnitudes)
+            self.assertEqual(self.M.get_magnitude(), expected_magnitudes)
+
+            
