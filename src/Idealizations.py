@@ -112,6 +112,10 @@ if __name__ == "__main__":
 
     class IdealizationTestCases(unittest.TestCase):
 
+        """
+        Class Containing all Unit Tests
+        """
+
         def setUp(self):
 
             self.boom = Boom()
@@ -203,6 +207,29 @@ if __name__ == "__main__":
             self.assertEqual(new_thicknesses[0], boom_size)
             self.assertEqual(new_thicknesses[1], s_skin_thickness)
             self.assertEqual(new_thicknesses[2], c_skin_thickness)
+
+        def test_length_setter_getter_methods(self):
+
+            #Initialized Values should be 0 and 0
+            expected_length = 0
+            expected_radius = 0
+
+            straight_len = self.s_skin.get_length()
+            curved_radius = self.c_skin.get_radius()
+
+            self.assertEqual(expected_length, straight_len)
+            self.assertEqual(expected_radius, curved_radius)
+
+            #Setting New Lengths and Radius
+            self.c_skin.set_radius(5)
+            self.s_skin.set_position(np.array([1,1,1]), which='end')
+
+            new_r = self.c_skin.get_radius()
+            new_l = self.s_skin.get_length()
+
+            self.assertEqual(new_r, 5)
+            self.assertAlmostEqual(new_l, np.linalg.norm([1,1,1]))
+
 
     def run_TestCases():
         suite = unittest.TestLoader().loadTestsFromTestCase(IdealizationTestCases)
