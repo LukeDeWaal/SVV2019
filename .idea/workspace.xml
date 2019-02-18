@@ -2,14 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="580e7e6b-b616-44ec-9938-20505707976d" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ForceMomentObjects.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/ForceMomentObjects.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Idealizations.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Idealizations.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/StructuralCalculations/Bending.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/StructuralCalculations/Bending.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/StructuralCalculations/Shear.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/StructuralCalculations/Shear.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/StructuralCalculations/Torsion.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/StructuralCalculations/Torsion.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/other.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/documentation/useful_links" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/NumericalTools.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/SVV2019.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/SVV2019.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Structure.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Structure.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -22,26 +19,29 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Idealizations.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1401">
-              <caret line="164" lean-forward="true" selection-start-line="164" selection-end-line="164" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/ForceMomentObjects.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="357">
-              <caret line="25" column="23" lean-forward="true" selection-start-line="25" selection-start-column="23" selection-end-line="25" selection-end-column="23" />
+            <state relative-caret-position="2771">
+              <caret line="164" selection-start-line="164" selection-end-line="164" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/ForceMomentObjects.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="357">
+              <caret line="25" column="23" selection-start-line="25" selection-start-column="23" selection-end-line="25" selection-end-column="23" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Structure.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="595">
-              <caret line="38" column="12" selection-start-line="38" selection-start-column="12" selection-end-line="38" selection-end-column="12" />
+            <state relative-caret-position="289">
+              <caret line="65" column="47" lean-forward="true" selection-start-line="65" selection-start-column="47" selection-end-line="65" selection-end-column="47" />
+              <folding>
+                <element signature="e#81#112#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -59,8 +59,8 @@
         <option value="$PROJECT_DIR$/src/StructuralCalculations/Torsion.py" />
         <option value="$PROJECT_DIR$/src/main.py" />
         <option value="$PROJECT_DIR$/src/Idealizations.py" />
-        <option value="$PROJECT_DIR$/src/Structure.py" />
         <option value="$PROJECT_DIR$/src/ForceMomentObjects.py" />
+        <option value="$PROJECT_DIR$/src/Structure.py" />
       </list>
     </option>
   </component>
@@ -160,16 +160,18 @@
       <updated>1550218131204</updated>
       <workItem from="1550218134447" duration="1074000" />
       <workItem from="1550219809468" duration="6733000" />
+      <workItem from="1550494633386" duration="165000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="7807000" />
+    <option name="totallyTimeSpent" value="7972000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.14765458" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.14925373" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -228,22 +230,25 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Idealizations.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1401">
-          <caret line="164" lean-forward="true" selection-start-line="164" selection-end-line="164" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Structure.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="595">
-          <caret line="38" column="12" selection-start-line="38" selection-start-column="12" selection-end-line="38" selection-end-column="12" />
+        <state relative-caret-position="2771">
+          <caret line="164" selection-start-line="164" selection-end-line="164" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/ForceMomentObjects.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="357">
-          <caret line="25" column="23" lean-forward="true" selection-start-line="25" selection-start-column="23" selection-end-line="25" selection-end-column="23" />
+          <caret line="25" column="23" selection-start-line="25" selection-start-column="23" selection-end-line="25" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Structure.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="289">
+          <caret line="65" column="47" lean-forward="true" selection-start-line="65" selection-start-column="47" selection-end-line="65" selection-end-column="47" />
+          <folding>
+            <element signature="e#81#112#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
