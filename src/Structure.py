@@ -8,13 +8,44 @@ import unittest
 import numpy as np
 
 
-class AssembledStructure(object):
+class CrossSection(object):
 
     def __init__(self, *objects: "Booms and/or Skin"):
 
-        self.__objects = objects
-        self.__structure = None
+        pass
 
+    def area_MOI(self, axis1, axis2=None):
+        pass
+
+    def get_mass(self):
+        pass
+
+    def get_objects(self):
+        pass
+
+    def calculate_shear_centre(self):
+        pass
+
+
+class FullModel(object):
+
+    def __init__(self, *crosssections, **forcesandmoments):
+        pass
+
+    def assemble_structure(self):
+        pass
+
+    def calculate_reaction_forces(self):
+        pass
+
+    def plot_structure(self):
+        pass
+
+    def get_mass(self):
+        pass
+
+    def get_objects(self):
+        pass
 
 if __name__ == "__main__":
 
@@ -22,7 +53,7 @@ if __name__ == "__main__":
 
         def setUp(self):
 
-            self.structure = AssembledStructure()
+            self.crosssection = CrossSection()
 
 
     def run_TestCases():
