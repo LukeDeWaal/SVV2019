@@ -19,6 +19,16 @@ class Boom(object):
         self.__mass = mass
         self.__size = size
         self.__pos = position
+        self.__type = "Stiffener"
+
+    def __str__(self):
+        return f"Type: {self.get_type()}, Mass: {self.get_mass()}, Size: {self.get_size()} \nPosition: {self.get_position()}"
+
+    def set_type(self, boom_type):
+        self.__type = boom_type
+
+    def get_type(self):
+        return self.__type
 
     def get_mass(self):
         return self.__mass
