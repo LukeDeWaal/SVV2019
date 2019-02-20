@@ -9,6 +9,7 @@ import unittest
 import numpy as np
 from src.NumericalTools import newtons_method, derive
 
+
 ha = 0.205
 Ca = 0.605
 pi = np.pi
@@ -74,7 +75,7 @@ def plot_crosssection(positions) -> None:
 
 class CrossSection:
 
-    def __init__(self, boom_coordinates, sparcap_coordinates=[np.array([ha/2, ha/2]), np.array([-ha/2, ha/2])], x_coordinate=0):
+    def __init__(self, boom_coordinates, sparcap_coordinates=None, x_coordinate=0):
 
         # Pointer
         self.__cur = 0
@@ -85,14 +86,16 @@ class CrossSection:
 
         # Boom Coordinates
         self.__stiffener_coordinates = np.concatenate((self.__x_vector, boom_coordinates), axis=1)
-        self.__sparcap_coordinates   = np.concatenate((np.ones((2, 1)) * self.__x, sparcap_coordinates), axis=1)
+        self.__sparcap_coordinates   = np.concatenate((np.ones((2, 1)) * self.__x, sparcap_coordinates), axis=1) if sparcap_coordinates is not None else None
 
         # Creating all Boom Objects
         self.__stiffener_booms = self.__initialize_boom_objects(self.__stiffener_coordinates)
-        self.__spar_booms = self.__initialize_spar_caps(self.__sparcap_coordinates)
+        self.__spar_booms = self.__initialize_spar_caps(self.__sparcap_coordinates) if self.__sparcap_coordinates is not None else None
         self.__all_booms = self.__stiffener_booms
-        self.__all_booms.insert(0, self.__spar_booms[0])
-        self.__all_booms.insert(4, self.__spar_booms[1])
+
+        if self.__spar_booms is not None:
+            self.__all_booms.insert(0, self.__spar_booms[0])
+            self.__all_booms.insert(4, self.__spar_booms[1])
 
         # Creating all Skin Objects between the Boom Objects
         self.__skin_objects = self.__initialize_skin_objects(self.__all_booms)
@@ -102,17 +105,17 @@ class CrossSection:
 
         # Calculate amount of booms
         self.__N_booms = len(self.get_stiffener_objects())
-        self.__N_spars = len(self.get_spar_caps())
+        self.__N_spars = len(self.get_spar_caps()) if self.__spar_booms is not None else 0
         self.__N_total = self.__N_booms + self.__N_spars
 
 
     @staticmethod
     def __initialize_boom_objects(coordinates) -> list:
-        return [Boom(1, 1, coordinate) for coordinate in coordinates]
+        return [Boom(density=1, size=1, position=coordinate) for coordinate in coordinates]
 
     @staticmethod
     def __initialize_spar_caps(coordinates) -> list:
-        return [Boom(1, 2, coordinate) for coordinate in coordinates]
+        return [Boom(density=1, size=2, position=coordinate) for coordinate in coordinates]
 
     @staticmethod
     def __initialize_skin_objects(boom_objects) -> list:
@@ -220,7 +223,6 @@ class CrossSection:
 
         for boom in self.get_all_booms():
             MOI += boom.get_size() * (boom.get_position()[idx1] * boom.get_position()[idx2])
-
         return MOI
 
     def update_boom_area(self, idx: int, size_increment: int or float):
@@ -304,6 +306,23 @@ class FullModel(object):
         string = ""
         for section in self.get_sections():
             string += str(section)
+
+    def __iter__(self):
+        self.__cur = 0
+        return self
+
+    def __next__(self):
+
+        if self.__cur >= self.get_N_sections():
+            raise StopIteration()
+
+        else:
+            result = self.get_sections()[self.__cur]
+            self.__cur += 1
+            return result
+
+    def get_N_sections(self):
+        return self.__N
 
     def __assemble_structure(self):
 
@@ -394,8 +413,22 @@ if __name__ == "__main__":
             self.crosssection = CrossSection(self.coordinates)
             self.model = FullModel(self.coordinates, (-self.ha/2, self.ha/2), 25)
 
-            self.sqcoordinates = np.array([[0,0],[0,1], [1,0], [1,1]])
-            self.sqmodel = FullModel(self.sqcoordinates, (-1, 1), 3)
+            self.sqcoordinates = np.array([[-0.5, -0.5], [0.5, -0.5], [0.5, 0.5], [-0.5, 0.5]])
+            self.sqmodel = FullModel(self.sqcoordinates, (-0.5, 0.5), 3)
+
+            self.beamcoordinates = np.array([[-2, -1],[2, -1], [2, 1], [-2, 1]])
+            self.beammodel = FullModel(self.beamcoordinates, (-1, 1), 3)
+
+            self.logcoordinates = np.concatenate((np.log((1 + np.random.randint(np.pi, 2 * np.pi) * np.arange(0, 1, 0.1)).reshape(10, 1)), np.arange(0, 1, 0.1).reshape(10, 1)), axis=1)
+            self.logmodel = FullModel(self.logcoordinates, (-1, 1), 5)
+
+
+        def test_plots(self):
+
+            for model in [self.sqmodel, self.beammodel, self.logmodel]:
+                fig = plt.figure()
+                ax = Axes3D(fig)
+                model.plot_structure(ax)
 
         def test_boom_coordinate_calculations(self):
 
@@ -427,10 +460,34 @@ if __name__ == "__main__":
             self.assertAlmostEqual(centroid[1], 0.0)
             self.assertLessEqual(centroid[2], self.Ca/2)
 
-
         def test_MOI(self):
             axes = ['z', 'y', 'zy']
-            pass
+
+            for idx, axis in enumerate(axes):
+                # Cube Model
+                for section in self.sqmodel:
+                    MOI = section.area_MOI(axes=axis)
+                    if axis == ('z' or 'y'):
+                        self.assertAlmostEqual(MOI, 1.0)
+                    elif axis == 'zy':
+                        self.assertAlmostEqual(MOI, 0.0)
+
+                # Beam Model
+                for section in self.beammodel:
+                    MOI = section.area_MOI(axes=axis)
+                    if axis == 'z':
+                        self.assertAlmostEqual(MOI, 16.0)
+                    elif axis == 'y':
+                        self.assertAlmostEqual(MOI, 4.0)
+                    elif axis == 'zy':
+                        self.assertAlmostEqual(MOI, 0.0)
+
+                # Log Model
+                for section in self.logmodel:
+                    MOI = section.area_MOI(axes=axis)
+
+                    if axis == 'zy':
+                        self.assertNotEqual(MOI, 0.0)
 
         def test_boom_update(self):
             pass
