@@ -222,7 +222,7 @@ class CrossSection:
 
         return MOI
 
-    def update_boom_area(self, idx, size_increment):
+    def update_boom_area(self, idx: int, size_increment: int or float):
         """
         :param idx: Index of boom item (top sparcap is idx=0, then moves counterclockwise)
         :return: None
@@ -238,35 +238,47 @@ class CrossSection:
         return sum([skin.get_mass() for skin in self.get_skin_objects()]) + \
                sum([boom.get_mass() for boom in self.get_all_booms()])
 
-    def get_all_booms(self):
+    def get_all_booms(self) -> list:
         """
         :return: Stiffener + Spar Cap Objects
         """
         return self.__all_booms
 
-    def get_spar_caps(self):
+    def get_spar_caps(self) -> list:
         """
         :return: Spar Cap Objects
         """
         return [self.get_all_booms()[0], self.get_all_booms()[4]]
 
-    def get_stiffener_objects(self):
+    def get_stiffener_objects(self) -> list:
         """
         :return: Stiffener Objects
         """
         return self.get_all_booms()[1:4] + self.get_all_booms()[5:]
 
-    def get_skin_objects(self):
+    def get_skin_objects(self) -> list:
         """
         :return: Skin Objects
         """
         return self.__skin_objects
 
-    def get_coordinates(self):
+    def get_all_coordinates(self) -> np.array:
         """
         :return: Array of crosssectional coordinates
         """
-        return np.array([boom.get_position() for boom in self.get_stiffener_objects()])
+        return np.array([boom.get_position() for boom in self.get_all_booms()])
+
+    def get_stiffener_coordinates(self):
+        """
+        :return: Array of stiffener coordinates
+        """
+        return self.__stiffener_coordinates
+
+    def get_sparcap_coordinates(self):
+        """
+        :return: Array of sparcap coordinates
+        """
+        return self.__sparcap_coordinates
 
     def calculate_shear_centre(self):
         pass
@@ -301,9 +313,8 @@ class FullModel(object):
 
     def get_all_boom_coordinates(self):
 
-        coordinates = tuple([section.get_coordinates() for section in self.get_sections()])
+        coordinates = tuple([section.get_all_coordinates() for section in self.get_sections()])
         return np.concatenate(coordinates, axis=0)
-        #return coordinates
 
     def calculate_reaction_forces(self):
         pass
@@ -375,8 +386,12 @@ class FullModel(object):
 
 if __name__ == "__main__":
 
-    squarecoors = np.array([[0, 0],[0,1], [1,0], [1,1]])
-    sqmodel = FullModel(squarecoors, (-1, 1), 3)
+    coordinates = get_crossectional_coordinates(Ca, ha, h_stringer)
+    model = FullModel(coordinates, (-1,1), 10)
+    model.plot_structure()
+
+    coordinates = get_crossectional_coordinates(Ca, ha, h_stringer)
+    crosssection = CrossSection(coordinates)
 
     class StructureTestCases(unittest.TestCase):
 
@@ -415,6 +430,15 @@ if __name__ == "__main__":
             for boom in self.crosssection.get_stiffener_objects():
                 self.assertEqual(boom.get_position()[0], 4.0)
 
+        def test_centroid_calculaton(self):
+
+            centroid = self.crosssection.get_centroid()
+
+            self.assertAlmostEqual(centroid[0], self.crosssection.get_x())
+            self.assertAlmostEqual(centroid[1], 0.0)
+            self.assertLessEqual(centroid[2], self.Ca/2)
+
+
         def test_MOI(self):
             axes = ['z', 'y', 'zy']
             pass
@@ -423,11 +447,15 @@ if __name__ == "__main__":
             pass
 
         def test_get_coordinates(self):
-            pass
 
+            cs_coordinates = self.crosssection.get_stiffener_coordinates()
+
+            for i in range(len(self.coordinates)):
+                for j in range(len(self.coordinates[i])):
+                    self.assertAlmostEqual(self.coordinates[i][j], cs_coordinates[i][j+1])
 
     def run_TestCases():
         suite = unittest.TestLoader().loadTestsFromTestCase(StructureTestCases)
         unittest.TextTestRunner(verbosity=2).run(suite)
 
-    #run_TestCases()
+    run_TestCases()
