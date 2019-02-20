@@ -46,6 +46,46 @@ class Force(object):
         self.__force = magnitude*dirvec
 
 
+class DistributedLoad(object):
+
+    def __init__(self, magnitude: float, startpos: np.array, endpos: np.array, direction: np.array, N):
+
+        self.__magnitude = magnitude
+        self.__direction = np.array(direction) if type(direction) != np.array else direction
+        self.__start = np.array(startpos) if type(startpos) != np.array else startpos
+        self.__end = np.array(endpos) if type(endpos) != np.array else endpos
+        self.__N = N
+
+        self.__discretized_forces = self.discretize()
+
+    def discretize(self):
+        forces = []
+        x_positions = np.linspace(self.__start[0], self.__end[0], self.__N)
+        y_positions = np.linspace(self.__start[1], self.__end[1], self.__N)
+        z_positions = np.linspace(self.__start[2], self.__end[2], self.__N)
+        for i in range(self.__N):
+            position = np.array([x_positions[i], y_positions[i], z_positions[i]])
+            force_magnitude = self.__magnitude*self.get_length()/self.get_N()
+            forces.append(Force(force_magnitude*self.__direction/np.linalg.norm(self.__direction), position))
+
+        return forces
+
+    def get_discretized_forces(self):
+        return self.__discretized_forces
+
+    def get_magnitude(self):
+        return self.__magnitude
+
+    def get_direction(self):
+        return self.__direction
+
+    def get_length(self):
+        return np.linalg.norm(self.__start - self.__end)
+
+    def get_N(self):
+        return self.__N
+
+
 class Moment(object):
 
     def __init__(self, momentvector: np.array = np.array([0,0,0]), positionvector: np.array = np.array([0,0,0])):
@@ -98,6 +138,7 @@ if __name__ == "__main__":
         def setUp(self):
             self.F = Force()
             self.M = Moment()
+            self.q = DistributedLoad(100, [0,0,0], [0,0,10], [0, -1, 0], 5)
 
         def test_position_getter_setter_methods(self):
 
@@ -159,6 +200,12 @@ if __name__ == "__main__":
 
             self.assertAlmostEqual(self.F.get_magnitude(), 100)
             self.assertAlmostEqual(self.M.get_magnitude(), 10)
+
+        def test_distributed_load_discretization(self):
+
+            discr = self.q.get_discretized_forces()
+            for force in discr:
+                self.assertAlmostEqual(force.get_magnitude(), self.q.get_magnitude()*self.q.get_length()/self.q.get_N())
 
 
     def run_TestCases():
