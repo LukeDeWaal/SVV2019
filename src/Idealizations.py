@@ -19,6 +19,16 @@ class Boom(object):
         self.__mass = mass
         self.__size = size
         self.__pos = position
+        self.__type = "Stiffener"
+
+    def __str__(self):
+        return f"Type: {self.get_type()}, Mass: {self.get_mass()}, Size: {self.get_size()} \nPosition: {self.get_position()}"
+
+    def set_type(self, boom_type):
+        self.__type = boom_type
+
+    def get_type(self):
+        return self.__type
 
     def get_mass(self):
         return self.__mass
@@ -37,6 +47,9 @@ class Boom(object):
 
     def set_position(self, position):
         self.__pos = position
+
+    def area_MOI(self, axis1, axis2=None):
+        pass
 
 
 class StraightSkin(object):
@@ -86,9 +99,12 @@ class StraightSkin(object):
         elif which == 'end':
             return self.__end
 
+    def area_MOI(self, axis1, axis2=None):
+        pass
+
 
 class CurvedSkin(StraightSkin):
-    #
+
     def __init__(self, mass: float = 0, thickness: float = 0, startpos: np.array = np.array([0, 0, 0]), endpos: np.array = np.array([0, 0, 0]), radius: float = 0):
         """
         Create a curved skin object (to connect booms)
@@ -165,7 +181,7 @@ if __name__ == "__main__":
             self.assertEqual(expected_position.all(), s_skin_pos.all())
             self.assertEqual(expected_position.all(), c_skin_pos.all())
 
-            #Set new positions
+            #Set new start positions
             new_positions = [np.array([10, 3, 23]), np.array([4, 10, -4]), np.array([28, -1, -1000])]
 
             self.boom.set_position(new_positions[0])
@@ -179,6 +195,18 @@ if __name__ == "__main__":
             self.assertEqual(new_positions[0].all(), boom_pos.all())
             self.assertEqual(new_positions[1].all(), s_skin_pos.all())
             self.assertEqual(new_positions[2].all(), c_skin_pos.all())
+
+            # Set new end positions
+            new_positions = [np.array([44, -13, 54]), np.array([-12, -31, 26])]
+
+            self.s_skin.set_position(new_positions[0], which='end')
+            self.c_skin.set_position(new_positions[1], which='end')
+
+            s_skin_pos = self.s_skin.get_position(which='end')
+            c_skin_pos = self.c_skin.get_position(which='end')
+
+            self.assertEqual(new_positions[0].all(), s_skin_pos.all())
+            self.assertEqual(new_positions[1].all(), c_skin_pos.all())
 
         def test_size_setter_getter_methods(self):
 

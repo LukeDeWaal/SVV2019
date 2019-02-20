@@ -1,20 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="1d04d51b-9a1e-451e-8e14-3c53d2d84ac0" name="Default Changelist" comment="">
-<<<<<<< HEAD
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ForceMomentObjects.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/ForceMomentObjects.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Idealizations.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Idealizations.py" afterDir="false" />
-=======
-      <change afterPath="$PROJECT_DIR$/src/StructuralCalculations/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Bending.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/StructuralCalculations/Bending.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Idealizations.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Idealizations.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Shear.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/StructuralCalculations/Shear.py" afterDir="false" />
+    <list default="true" id="580e7e6b-b616-44ec-9938-20505707976d" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/src/Structure.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Structure.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Torsion.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/StructuralCalculations/Torsion.py" afterDir="false" />
->>>>>>> 9887a445fc1e7de04c2498f0cc91968389768e00
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -22,59 +10,25 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="FUSProjectUsageTrigger">
-    <session id="634059758">
-      <usages-collector id="statistics.lifecycle.project">
-        <counts>
-          <entry key="project.open.time.1" value="1" />
-          <entry key="project.opened" value="1" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.types.edit">
-        <counts>
-          <entry key="Python" value="203" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.types.open">
-        <counts>
-          <entry key="Python" value="5" />
-        </counts>
-      </usages-collector>
-    </session>
+  <component name="CoverageDataManager">
+    <SUITE FILE_PATH="coverage/SVV2019$Structure.coverage" NAME="Structure Coverage Results" MODIFIED="1550650469680" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main.py">
+        <entry file="file://$PROJECT_DIR$/src/Idealizations.py">
           <provider selected="true" editor-type-id="text-editor">
-<<<<<<< HEAD
-            <state relative-caret-position="187">
-              <caret line="12" selection-start-line="12" selection-end-line="12" />
-=======
-            <state>
-              <caret column="3" lean-forward="true" selection-start-column="3" selection-end-column="3" />
->>>>>>> 9887a445fc1e7de04c2498f0cc91968389768e00
-              <folding>
-                <element signature="e#21#57#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="578">
+              <caret line="36" column="26" selection-start-line="36" selection-start-column="26" selection-end-line="36" selection-end-column="26" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/StructuralCalculations/Shear.py">
+        <entry file="file://$PROJECT_DIR$/src/ForceMomentObjects.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="51">
-              <caret line="3" selection-start-line="3" selection-end-line="3" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/StructuralCalculations/Torsion.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="153">
-              <caret line="9" lean-forward="true" selection-start-line="9" selection-end-line="9" />
+            <state relative-caret-position="799">
+              <caret line="48" column="10" selection-start-line="48" selection-start-column="10" selection-end-line="48" selection-end-column="10" />
             </state>
           </provider>
         </entry>
@@ -82,69 +36,18 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Structure.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="119">
-              <caret line="7" column="46" selection-start-line="7" selection-start-column="46" selection-end-line="7" selection-end-column="46" />
+            <state relative-caret-position="352">
+              <caret line="401" lean-forward="true" selection-start-line="401" selection-end-line="401" />
               <folding>
-                <element signature="e#81#112#0" expanded="true" />
+                <element signature="e#8667#8829#0" />
+                <element signature="e#8968#9034#0" />
+                <element signature="e#11223#11245#0" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/Idealizations.py">
-          <provider selected="true" editor-type-id="text-editor">
-<<<<<<< HEAD
-            <state relative-caret-position="367">
-              <caret line="251" lean-forward="true" selection-start-line="251" selection-end-line="251" />
-=======
-            <state relative-caret-position="1530">
-              <caret line="108" lean-forward="true" selection-start-line="108" selection-end-line="108" />
->>>>>>> 9887a445fc1e7de04c2498f0cc91968389768e00
-              <folding>
-                <element signature="e#43#61#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-<<<<<<< HEAD
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/ForceMomentObjects.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="469">
-              <caret line="142" column="12" lean-forward="true" selection-start-line="142" selection-start-column="12" selection-end-line="142" selection-end-column="12" />
-              <folding>
-                <element signature="e#45#63#0" expanded="true" />
-              </folding>
-=======
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/StructuralCalculations/Bending.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="68">
-              <caret line="4" selection-start-line="4" selection-end-line="4" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/ForceMomentObjects.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="248">
-              <caret line="15" column="34" lean-forward="true" selection-start-line="15" selection-start-column="34" selection-end-line="15" selection-end-column="34" />
->>>>>>> 9887a445fc1e7de04c2498f0cc91968389768e00
             </state>
           </provider>
         </entry>
       </file>
     </leaf>
-  </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="Python Script" />
-      </list>
-    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -152,31 +55,16 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/data/data_readme.txt" />
-        <option value="$PROJECT_DIR$/documentation/documentation_readme.txt" />
-        <option value="$PROJECT_DIR$/src/sourcecode_readme.txt" />
-        <option value="$PROJECT_DIR$/src/Shear.py" />
-        <option value="$PROJECT_DIR$/src/Bending.py" />
-        <option value="$PROJECT_DIR$/src/Torsion.py" />
-<<<<<<< HEAD
-        <option value="$PROJECT_DIR$/src/Structure.py" />
-        <option value="$PROJECT_DIR$/src/main.py" />
-        <option value="$PROJECT_DIR$/src/Idealizations.py" />
-        <option value="$PROJECT_DIR$/src/ForceMomentObjects.py" />
-=======
+        <option value="$PROJECT_DIR$/src/StructuralCalculations/Bending.py" />
+        <option value="$PROJECT_DIR$/src/StructuralCalculations/Shear.py" />
+        <option value="$PROJECT_DIR$/src/StructuralCalculations/Torsion.py" />
         <option value="$PROJECT_DIR$/src/main.py" />
         <option value="$PROJECT_DIR$/src/ForceMomentObjects.py" />
+        <option value="$PROJECT_DIR$/src/NumericalTools.py" />
         <option value="$PROJECT_DIR$/src/Idealizations.py" />
         <option value="$PROJECT_DIR$/src/Structure.py" />
->>>>>>> 9887a445fc1e7de04c2498f0cc91968389768e00
       </list>
     </option>
-  </component>
-  <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
-  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
-  <component name="JsGulpfileManager">
-    <detection-done>true</detection-done>
-    <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="-7" />
@@ -195,11 +83,6 @@
             <path>
               <item name="SVV2019" type="b2602c69:ProjectViewProjectNode" />
               <item name="SVV2019" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="SVV2019" type="b2602c69:ProjectViewProjectNode" />
-              <item name="SVV2019" type="462c0819:PsiDirectoryNode" />
-              <item name="data" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="SVV2019" type="b2602c69:ProjectViewProjectNode" />
@@ -225,10 +108,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
-    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
-    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -242,7 +122,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Python.Structure">
     <configuration name="Idealizations" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="SVV2019" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -265,10 +145,36 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="Structure" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="SVV2019" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/Structure.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Python.Idealizations" />
+      <item itemvalue="Python.Structure" />
+    </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.Idealizations" />
-        <item itemvalue="Python.Idealizations" />
+        <item itemvalue="Python.Structure" />
+        <item itemvalue="Python.Structure" />
+        <item itemvalue="Python.Structure" />
+        <item itemvalue="Python.Structure" />
+        <item itemvalue="Python.Structure" />
       </list>
     </recent_temporary>
   </component>
@@ -277,34 +183,33 @@
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="1d04d51b-9a1e-451e-8e14-3c53d2d84ac0" name="Default Changelist" comment="" />
-      <created>1550048007316</created>
+      <changelist id="580e7e6b-b616-44ec-9938-20505707976d" name="Default Changelist" comment="" />
+      <created>1550218131204</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1550048007316</updated>
-      <workItem from="1550048008556" duration="953000" />
-      <workItem from="1550053753975" duration="9884000" />
-      <workItem from="1550149939960" duration="617000" />
-      <workItem from="1550150579172" duration="597000" />
-      <workItem from="1550151194350" duration="1503000" />
+      <updated>1550218131204</updated>
+      <workItem from="1550218134447" duration="1074000" />
+      <workItem from="1550219809468" duration="6733000" />
+      <workItem from="1550494633386" duration="5218000" />
+      <workItem from="1550499892776" duration="48000" />
+      <workItem from="1550499955204" duration="4703000" />
+      <workItem from="1550650329526" duration="5368000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="13554000" />
+    <option name="totallyTimeSpent" value="23144000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <editor active="true" />
     <layout>
-<<<<<<< HEAD
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.26066098" />
-=======
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.18336888" />
->>>>>>> 9887a445fc1e7de04c2498f0cc91968389768e00
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.15565032" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info active="true" anchor="bottom" id="Concurrent Activities Diagram" weight="0.32936078" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32936078" />
       <window_info anchor="bottom" id="Run" order="2" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
@@ -313,27 +218,23 @@
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" />
       <window_info anchor="bottom" id="Database Changes" order="9" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" weight="0.32936078" />
+      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.50053304" side_tool="true" weight="0.32936078" />
       <window_info anchor="bottom" id="Terminal" order="11" />
-<<<<<<< HEAD
-      <window_info anchor="bottom" id="Python Console" order="12" visible="true" weight="0.32936078" />
-=======
-      <window_info anchor="bottom" id="Python Console" order="12" visible="true" weight="0.3286334" />
->>>>>>> 9887a445fc1e7de04c2498f0cc91968389768e00
+      <window_info active="true" anchor="bottom" id="Python Console" order="12" sideWeight="0.49946696" visible="true" weight="0.30877572" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" id="SciView" order="3" />
+      <window_info anchor="right" id="SciView" order="3" weight="0.32995737" />
       <window_info anchor="right" id="R Graphics" order="4" />
       <window_info anchor="right" id="R Packages" order="5" />
       <window_info anchor="right" id="Database" order="6" />
     </layout>
     <layout-to-restore>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25266525" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.15245202" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32936078" />
       <window_info anchor="bottom" id="Run" order="2" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
@@ -342,13 +243,13 @@
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
-      <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" weight="0.32936078" />
+      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.50053304" side_tool="true" weight="0.32936078" />
       <window_info anchor="bottom" id="Terminal" order="11" />
-      <window_info anchor="bottom" id="Python Console" order="12" />
+      <window_info anchor="bottom" id="Python Console" order="12" sideWeight="0.49946696" visible="true" weight="0.31419286" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" id="SciView" order="3" />
+      <window_info anchor="right" id="SciView" order="3" visible="true" weight="0.32995737" />
       <window_info anchor="right" id="R Graphics" order="4" />
       <window_info anchor="right" id="R Packages" order="5" />
       <window_info anchor="right" id="Database" order="6" />
@@ -357,159 +258,77 @@
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
   </component>
-  <component name="VcsContentAnnotationSettings">
-    <option name="myLimit" value="2678400000" />
-  </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/data/data_readme.txt">
+    <entry file="file://$PROJECT_DIR$/src/StructuralCalculations/Torsion.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="49" selection-start-column="49" selection-end-column="49" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/documentation/documentation_readme.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="57" selection-start-column="57" selection-end-column="57" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/sourcecode_readme.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="11" column="17" lean-forward="true" selection-start-line="11" selection-start-column="17" selection-end-line="11" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-<<<<<<< HEAD
-    <entry file="file://$PROJECT_DIR$/src/Shear.py">
-=======
-    <entry file="uml://Python/#C:/Users/Luke/Desktop/SVV2019/src/main.py">
-      <provider selected="true" editor-type-id="UmlEditorProvider">
-        <state>
-          <ID>Python</ID>
-          <OriginalElement>#C:/Users/Luke/Desktop/SVV2019/src/main.py</OriginalElement>
-          <nodes />
-          <notes />
-          <edges />
-          <settings layout="Hierarchic Group" zoom="1.0" x="701.0" y="284.0" />
-          <SelectedNodes />
-          <Categories />
-          <SCOPE>All</SCOPE>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/StructuralCalculations/Bending.py">
->>>>>>> 9887a445fc1e7de04c2498f0cc91968389768e00
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" selection-start-line="4" selection-end-line="4" />
+        <state relative-caret-position="136">
+          <caret line="8" column="12" lean-forward="true" selection-start-line="8" selection-start-column="12" selection-end-line="8" selection-end-column="12" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/StructuralCalculations/Shear.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" selection-start-line="3" selection-end-line="3" />
+        <state relative-caret-position="102">
+          <caret line="6" lean-forward="true" selection-start-line="6" selection-end-line="6" />
         </state>
       </provider>
     </entry>
-<<<<<<< HEAD
-    <entry file="uml://Python/#C:/Users/Luke/Desktop/SVV2019/src/main.py">
-      <provider selected="true" editor-type-id="UmlEditorProvider">
-        <state>
-          <ID>Python</ID>
-          <OriginalElement>#C:/Users/Luke/Desktop/SVV2019/src/main.py</OriginalElement>
-          <nodes />
-          <notes />
-          <edges />
-          <settings layout="Hierarchic Group" zoom="1.0" x="701.0" y="284.0" />
-          <SelectedNodes />
-          <Categories />
-          <SCOPE>All</SCOPE>
-=======
-    <entry file="file://$PROJECT_DIR$/src/StructuralCalculations/Torsion.py">
+    <entry file="file://$PROJECT_DIR$/src/StructuralCalculations/Bending.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="9" lean-forward="true" selection-start-line="9" selection-end-line="9" />
->>>>>>> 9887a445fc1e7de04c2498f0cc91968389768e00
+        <state relative-caret-position="255">
+          <caret line="15" selection-start-line="15" selection-end-line="15" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main.py">
       <provider selected="true" editor-type-id="text-editor">
-<<<<<<< HEAD
-        <state relative-caret-position="187">
-          <caret line="12" selection-start-line="12" selection-end-line="12" />
-=======
+        <state relative-caret-position="374">
+          <caret line="23" column="12" selection-start-line="23" selection-start-column="12" selection-end-line="23" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/sourcecode_readme.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/documentation/useful_links">
+      <provider selected="true" editor-type-id="text-editor">
         <state>
-          <caret column="3" lean-forward="true" selection-start-column="3" selection-end-column="3" />
->>>>>>> 9887a445fc1e7de04c2498f0cc91968389768e00
-          <folding>
-            <element signature="e#21#57#0" expanded="true" />
-          </folding>
+          <caret column="40" selection-start-column="40" selection-end-column="40" />
         </state>
       </provider>
     </entry>
-<<<<<<< HEAD
-    <entry file="file://$PROJECT_DIR$/src/Torsion.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="9" lean-forward="true" selection-start-line="9" selection-end-line="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$APPLICATION_HOME_DIR$/helpers/typeshed/stdlib/3/unittest/__init__.pyi">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="606">
-          <caret line="43" column="8" selection-start-line="43" selection-start-column="8" selection-end-line="43" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Structure.py">
-=======
     <entry file="file://$PROJECT_DIR$/src/ForceMomentObjects.py">
->>>>>>> 9887a445fc1e7de04c2498f0cc91968389768e00
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="248">
-          <caret line="15" column="34" lean-forward="true" selection-start-line="15" selection-start-column="34" selection-end-line="15" selection-end-column="34" />
+        <state relative-caret-position="799">
+          <caret line="48" column="10" selection-start-line="48" selection-start-column="10" selection-end-line="48" selection-end-column="10" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Idealizations.py">
       <provider selected="true" editor-type-id="text-editor">
-<<<<<<< HEAD
-        <state relative-caret-position="367">
-          <caret line="251" lean-forward="true" selection-start-line="251" selection-end-line="251" />
-=======
-        <state relative-caret-position="1530">
-          <caret line="108" lean-forward="true" selection-start-line="108" selection-end-line="108" />
->>>>>>> 9887a445fc1e7de04c2498f0cc91968389768e00
+        <state relative-caret-position="578">
+          <caret line="36" column="26" selection-start-line="36" selection-start-column="26" selection-end-line="36" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/NumericalTools.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="579">
+          <caret line="58" lean-forward="true" selection-start-line="58" selection-end-line="58" />
           <folding>
-            <element signature="e#43#61#0" expanded="true" />
+            <element signature="e#0#18#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-<<<<<<< HEAD
-    <entry file="file://$PROJECT_DIR$/src/ForceMomentObjects.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="469">
-          <caret line="142" column="12" lean-forward="true" selection-start-line="142" selection-start-column="12" selection-end-line="142" selection-end-column="12" />
-          <folding>
-            <element signature="e#45#63#0" expanded="true" />
-=======
-    <entry file="file://$PROJECT_DIR$/src/__init__.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Structure.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" column="46" selection-start-line="7" selection-start-column="46" selection-end-line="7" selection-end-column="46" />
+        <state relative-caret-position="352">
+          <caret line="401" lean-forward="true" selection-start-line="401" selection-end-line="401" />
           <folding>
-            <element signature="e#81#112#0" expanded="true" />
->>>>>>> 9887a445fc1e7de04c2498f0cc91968389768e00
+            <element signature="e#8667#8829#0" />
+            <element signature="e#8968#9034#0" />
+            <element signature="e#11223#11245#0" />
           </folding>
         </state>
       </provider>

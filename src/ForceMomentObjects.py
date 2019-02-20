@@ -17,7 +17,7 @@ class Force(object):
         self.__force = forcevector
         self.__pos = positionvector
 
-    def get_position(self):
+    def get_position(self) -> np.array:
         return self.__pos
 
     def set_position(self, positionvector: np.array):
