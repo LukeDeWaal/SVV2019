@@ -56,7 +56,7 @@ class DistributedLoad(object):
         self.__end = np.array(endpos) if type(endpos) != np.array else endpos
         self.__N = N
 
-        self.__discretized_forces = self.discretize()
+        self.__discretized_forces = None
 
     def discretize(self):
         forces = []
@@ -95,8 +95,8 @@ class Moment(object):
         :param positionvector: Vector describing the position it is applied
         """
 
-        self.__moment = momentvector
-        self.__pos = positionvector
+        self.__moment = np.array(momentvector) if type(momentvector) != np.array else momentvector
+        self.__pos = positionvector if type(positionvector) != np.array else positionvector
 
     def get_position(self):
         return self.__pos

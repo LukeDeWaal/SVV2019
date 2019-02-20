@@ -105,6 +105,7 @@ class CrossSection:
         self.__N_spars = len(self.get_spar_caps())
         self.__N_total = self.__N_booms + self.__N_spars
 
+
     @staticmethod
     def __initialize_boom_objects(coordinates) -> list:
         return [Boom(1, 1, coordinate) for coordinate in coordinates]
@@ -286,15 +287,13 @@ class CrossSection:
 
 class FullModel(object):
 
-    def __init__(self, coordinates, xrange, N, *forces_and_moments):
+    def __init__(self, coordinates, xrange, N):
 
         self.__sections = [None]*N
         self.__cur = 0
         self.__boomcoordinates = coordinates
         self.__xrange = xrange
         self.__N = N
-
-        self.__forcesandmoments = forces_and_moments
 
         self.__assemble_structure()
 
@@ -325,10 +324,7 @@ class FullModel(object):
             return v1 + (v2-v1)*t
         return line
 
-    def plot_structure(self):
-
-        fig = plt.figure()
-        ax = Axes3D(fig)
+    def plot_structure(self, ax):
 
         # Boom Coordinates
         coordinates = self.get_all_boom_coordinates()
@@ -372,10 +368,10 @@ class FullModel(object):
         ax.scatter3D(xboomplot, zboomplot, yboomplot, s=40, c='k')
 
         for i in range(self.__N):
-            ax.plot(xlineplot_1[i], zlineplot_1[i], ylineplot_1[i], 'r')
+            ax.plot(xlineplot_1[i], zlineplot_1[i], ylineplot_1[i], 'k')
 
         for i in range(17):
-            ax.plot(xlineplot_2[i], zlineplot_2[i], ylineplot_2[i], 'r')
+            ax.plot(xlineplot_2[i], zlineplot_2[i], ylineplot_2[i], 'k')
 
     def get_mass(self):
         return sum([section.get_mass() for section in self.get_sections()])
@@ -385,13 +381,6 @@ class FullModel(object):
 
 
 if __name__ == "__main__":
-
-    coordinates = get_crossectional_coordinates(Ca, ha, h_stringer)
-    model = FullModel(coordinates, (-1,1), 10)
-    model.plot_structure()
-
-    coordinates = get_crossectional_coordinates(Ca, ha, h_stringer)
-    crosssection = CrossSection(coordinates)
 
     class StructureTestCases(unittest.TestCase):
 
