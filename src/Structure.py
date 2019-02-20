@@ -101,20 +101,20 @@ class CrossSection:
         self.__centroid = self.get_centroid()
 
         # Calculate amount of booms
-        self.__N_booms = len(self.get_boom_objects())
+        self.__N_booms = len(self.get_stiffener_objects())
         self.__N_spars = len(self.get_spar_caps())
         self.__N_total = self.__N_booms + self.__N_spars
 
     @staticmethod
-    def __initialize_boom_objects(coordinates):
+    def __initialize_boom_objects(coordinates) -> list:
         return [Boom(1, 1, coordinate) for coordinate in coordinates]
 
     @staticmethod
-    def __initialize_spar_caps(coordinates):
+    def __initialize_spar_caps(coordinates) -> list:
         return [Boom(1, 2, coordinate) for coordinate in coordinates]
 
     @staticmethod
-    def __initialize_skin_objects(boom_objects):
+    def __initialize_skin_objects(boom_objects) -> list:
         skin_objects = []
         i = -1
         while True:
@@ -134,10 +134,10 @@ class CrossSection:
             return v1 + (v2-v1)*t
         return line
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"# Booms: {self.get_N_booms()}, # Spar Caps: {self.get_N_spars()} \n"
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self.get_skin_objects())+len(self.get_all_booms())
 
     def __iter__(self):
@@ -152,13 +152,13 @@ class CrossSection:
         self.__cur += 1
         return result
 
-    def get_N_booms(self):
+    def get_N_booms(self) -> int:
         return self.__N_booms
 
-    def get_N_spars(self):
+    def get_N_spars(self) -> int:
         return self.__N_spars
 
-    def get_N_objects(self):
+    def get_N_objects(self) -> int:
         return self.get_N_booms() + self.get_N_spars()
 
     def set_x(self, x):
@@ -167,19 +167,19 @@ class CrossSection:
         :param x: X Coordinate
         :return: None
         """
-        for boom in self.get_boom_objects():
+        for boom in self.get_all_booms():
             old_position = boom.get_position()
             old_position[0] = x
             boom.set_position(old_position)
 
-    def get_x(self):
+    def get_x(self) -> float or int:
         """
         Check the x-value of the crosssection
         :return: x coordinate
         """
-        return self.get_boom_objects()[0].get_position()[0]
+        return self.get_stiffener_objects()[0].get_position()[0]
 
-    def get_centroid(self):
+    def get_centroid(self) -> float or int:
         """
         Calculate the centroid of the crosssection
         :return: [x, y_bar, z_bar]
@@ -196,7 +196,7 @@ class CrossSection:
 
         return np.array([self.__x, ybar, zbar])
 
-    def area_MOI(self, axes: str):
+    def area_MOI(self, axes: str) -> float or int:
         """
         Calculate the MOI with the defined axes
         :param axes: 'z', 'zz', 'y', 'yy', 'zy'
@@ -219,6 +219,7 @@ class CrossSection:
 
         for boom in self.get_all_booms():
             MOI += boom.get_size() * (boom.get_position()[idx1] * boom.get_position()[idx2])
+
         return MOI
 
     def update_boom_area(self, idx, size_increment):
@@ -229,7 +230,7 @@ class CrossSection:
         old_size = self.get_all_booms()[idx].get_size()
         self.get_all_booms()[idx].set_size(old_size + size_increment)
 
-    def get_mass(self):
+    def get_mass(self) -> float or int:
         """
         Get total summed up mass of booms and skins
         :return: Total Mass
@@ -237,26 +238,35 @@ class CrossSection:
         return sum([skin.get_mass() for skin in self.get_skin_objects()]) + \
                sum([boom.get_mass() for boom in self.get_all_booms()])
 
+    def get_all_booms(self):
+        """
+        :return: Stiffener + Spar Cap Objects
+        """
+        return self.__all_booms
+
     def get_spar_caps(self):
         """
         :return: Spar Cap Objects
         """
-        return self.__spar_booms
+        return [self.get_all_booms()[0], self.get_all_booms()[4]]
 
-    def get_all_booms(self):
-        return self.__all_booms
-
-    def get_boom_objects(self):
-        return self.__stiffener_booms
+    def get_stiffener_objects(self):
+        """
+        :return: Stiffener Objects
+        """
+        return self.get_all_booms()[1:4] + self.get_all_booms()[5:]
 
     def get_skin_objects(self):
+        """
+        :return: Skin Objects
+        """
         return self.__skin_objects
 
-    def get_objects(self):
-        return [self.get_boom_objects(), self.get_skin_objects()]
-
     def get_coordinates(self):
-        return np.array([boom.get_position() for boom in self.get_boom_objects()])
+        """
+        :return: Array of crosssectional coordinates
+        """
+        return np.array([boom.get_position() for boom in self.get_stiffener_objects()])
 
     def calculate_shear_centre(self):
         pass
@@ -283,18 +293,6 @@ class FullModel(object):
         string = ""
         for section in self.get_sections():
             string += str(section)
-
-    # def __iter__(self):
-    #     self.__cur = 0
-    #     return self
-    #
-    # def __next__(self):
-    #
-    #     if self.__cur >= self.__N + 1:
-    #         raise StopIteration()
-    #     else:
-    #         result = self.__sections[self.__cur]
-    #         return result
 
     def __assemble_structure(self):
 
@@ -347,8 +345,6 @@ class FullModel(object):
             ylineplot_1[idx].append(section_coordinates[0].get_position()[1])
             zlineplot_1[idx].append(section_coordinates[0].get_position()[2])
 
-
-
         # Lines through crosssection
         xlineplot_2 = [[] for _ in range(17)]
         ylineplot_2 = [[] for _ in range(17)]
@@ -371,7 +367,7 @@ class FullModel(object):
             ax.plot(xlineplot_2[i], zlineplot_2[i], ylineplot_2[i], 'r')
 
     def get_mass(self):
-        pass
+        return sum([section.get_mass() for section in self.get_sections()])
 
     def get_sections(self):
         return self.__sections
@@ -379,12 +375,8 @@ class FullModel(object):
 
 if __name__ == "__main__":
 
-    boompos = get_crossectional_coordinates(Ca, ha, h_stringer)
-
-    #CS = CrossSection(a, 4)
-    model = FullModel(boompos, (-2.661/2, 2.661/2), 10)
-    a = model.get_all_boom_coordinates()
-    model.plot_structure()
+    squarecoors = np.array([[0, 0],[0,1], [1,0], [1,1]])
+    sqmodel = FullModel(squarecoors, (-1, 1), 3)
 
     class StructureTestCases(unittest.TestCase):
 
@@ -396,7 +388,10 @@ if __name__ == "__main__":
 
             self.coordinates = get_crossectional_coordinates(self.Ca, self.ha, self.h_stringer)
             self.crosssection = CrossSection(self.coordinates)
+            self.model = FullModel(self.coordinates, (-self.ha/2, self.ha/2), 25)
 
+            self.sqcoordinates = np.array([[0,0],[0,1], [1,0], [1,1]])
+            self.sqmodel = FullModel(self.sqcoordinates, (-1, 1), 3)
 
         def test_boom_coordinate_calculations(self):
 
@@ -417,12 +412,22 @@ if __name__ == "__main__":
             self.crosssection.set_x(4.0)
             self.assertEqual(self.crosssection.get_x(), 4.0)
 
-            for boom in self.crosssection.get_boom_objects():
+            for boom in self.crosssection.get_stiffener_objects():
                 self.assertEqual(boom.get_position()[0], 4.0)
+
+        def test_MOI(self):
+            axes = ['z', 'y', 'zy']
+            pass
+
+        def test_boom_update(self):
+            pass
+
+        def test_get_coordinates(self):
+            pass
 
 
     def run_TestCases():
         suite = unittest.TestLoader().loadTestsFromTestCase(StructureTestCases)
         unittest.TextTestRunner(verbosity=2).run(suite)
 
-    run_TestCases()
+    #run_TestCases()
