@@ -76,13 +76,16 @@ class CrossSection:
 
     def __init__(self, boom_coordinates, sparcap_coordinates=[np.array([ha/2, ha/2]), np.array([-ha/2, ha/2])], x_coordinate=0):
 
+        # Pointer
         self.__cur = 0
 
+        # X-Coordinate
         self.__x = x_coordinate
         self.__x_vector = np.ones((len(boom_coordinates[:, 0]), 1)) * self.__x
 
-        self.__stiffener_coordinates    = np.concatenate((self.__x_vector, boom_coordinates), axis=1)
-        self.__sparcap_coordinates = np.concatenate((np.ones((2, 1)) * self.__x, sparcap_coordinates), axis=1)
+        # Boom Coordinates
+        self.__stiffener_coordinates = np.concatenate((self.__x_vector, boom_coordinates), axis=1)
+        self.__sparcap_coordinates   = np.concatenate((np.ones((2, 1)) * self.__x, sparcap_coordinates), axis=1)
 
         # Creating all Boom Objects
         self.__stiffener_booms = self.__initialize_boom_objects(self.__stiffener_coordinates)
@@ -218,12 +221,13 @@ class CrossSection:
             MOI += boom.get_size() * (boom.get_position()[idx1] * boom.get_position()[idx2])
         return MOI
 
-    def update_boom_area(self, idx):
+    def update_boom_area(self, idx, size_increment):
         """
         :param idx: Index of boom item (top sparcap is idx=0, then moves counterclockwise)
         :return: None
         """
-        pass
+        old_size = self.get_all_booms()[idx].get_size()
+        self.get_all_booms()[idx].set_size(old_size + size_increment)
 
     def get_mass(self):
         """
@@ -277,27 +281,27 @@ class FullModel(object):
 
     def __str__(self):
         string = ""
-        for section in self:
+        for section in self.get_sections():
             string += str(section)
 
-    def __iter__(self):
-        self.__cur = 0
-        return self
-
-    def __next__(self):
-
-        if self.__cur >= self.__N + 1:
-            raise StopIteration()
-        else:
-            result = self.__sections[self.__cur]
-            return result
+    # def __iter__(self):
+    #     self.__cur = 0
+    #     return self
+    #
+    # def __next__(self):
+    #
+    #     if self.__cur >= self.__N + 1:
+    #         raise StopIteration()
+    #     else:
+    #         result = self.__sections[self.__cur]
+    #         return result
 
     def __assemble_structure(self):
 
         for idx, xi in enumerate(np.linspace(self.__xrange[0], self.__xrange[1], self.__N)):
             self.__sections[idx] = CrossSection(self.__boomcoordinates, x_coordinate=xi)
 
-    def get_all_coordinates(self):
+    def get_all_boom_coordinates(self):
 
         coordinates = tuple([section.get_coordinates() for section in self.get_sections()])
         return np.concatenate(coordinates, axis=0)
@@ -318,7 +322,7 @@ class FullModel(object):
         ax = Axes3D(fig)
 
         # Boom Coordinates
-        coordinates = self.get_all_coordinates()
+        coordinates = self.get_all_boom_coordinates()
         xboomplot = coordinates[:, 0]
         yboomplot = coordinates[:, 1]
         zboomplot = coordinates[:, 2]
@@ -328,43 +332,43 @@ class FullModel(object):
         ax.set_zlim3d(-0.3, 0.3)
 
         # Lines around crosssection
-        # xlineplot_1 = [[] for _ in range(self.__N)]
-        # ylineplot_1 = [[] for _ in range(self.__N)]
-        # zlineplot_1 = [[] for _ in range(self.__N)]
-        #
-        # for idx, section in enumerate(self.get_sections()):
-        #     section_coordinates = section.get_all_booms()
-        #     for boom in section_coordinates:
-        #         position = boom.get_position()
-        #         xlineplot_1[idx].append(position[0])
-        #         ylineplot_1[idx].append(position[1])
-        #         zlineplot_1[idx].append(position[2])
-        #     xlineplot_1[idx].append(section_coordinates[0].get_position()[0])
-        #     ylineplot_1[idx].append(section_coordinates[0].get_position()[1])
-        #     zlineplot_1[idx].append(section_coordinates[0].get_position()[2])
-        #
-        #
-        #
-        # # Lines through crosssection
-        # xlineplot_2 = [[] for _ in range(17)]
-        # ylineplot_2 = [[] for _ in range(17)]
-        # zlineplot_2 = [[] for _ in range(17)]
-        #
-        # for section in self.get_sections():
-        #     section_coordinates = section.get_all_booms()
-        #     for idx, boom in enumerate(section_coordinates):
-        #         position = boom.get_position()
-        #         xlineplot_2[idx].append(position[0])
-        #         ylineplot_2[idx].append(position[1])
-        #         zlineplot_2[idx].append(position[2])
+        xlineplot_1 = [[] for _ in range(self.__N)]
+        ylineplot_1 = [[] for _ in range(self.__N)]
+        zlineplot_1 = [[] for _ in range(self.__N)]
+
+        for idx, section in enumerate(self.get_sections()):
+            section_coordinates = section.get_all_booms()
+            for boom in section_coordinates:
+                position = boom.get_position()
+                xlineplot_1[idx].append(position[0])
+                ylineplot_1[idx].append(position[1])
+                zlineplot_1[idx].append(position[2])
+            xlineplot_1[idx].append(section_coordinates[0].get_position()[0])
+            ylineplot_1[idx].append(section_coordinates[0].get_position()[1])
+            zlineplot_1[idx].append(section_coordinates[0].get_position()[2])
+
+
+
+        # Lines through crosssection
+        xlineplot_2 = [[] for _ in range(17)]
+        ylineplot_2 = [[] for _ in range(17)]
+        zlineplot_2 = [[] for _ in range(17)]
+
+        for section in self.get_sections():
+            section_coordinates = section.get_all_booms()
+            for idx, boom in enumerate(section_coordinates):
+                position = boom.get_position()
+                xlineplot_2[idx].append(position[0])
+                ylineplot_2[idx].append(position[1])
+                zlineplot_2[idx].append(position[2])
 
         ax.scatter3D(xboomplot, zboomplot, yboomplot, s=40, c='k')
-        #
-        # for i in range(self.__N):
-        #     ax.plot(xlineplot_1[i], zlineplot_1[i], ylineplot_1[i], 'r')
-        #
-        # for i in range(17):
-        #     ax.plot(xlineplot_2[i], zlineplot_2[i], ylineplot_2[i], 'r')
+
+        for i in range(self.__N):
+            ax.plot(xlineplot_1[i], zlineplot_1[i], ylineplot_1[i], 'r')
+
+        for i in range(17):
+            ax.plot(xlineplot_2[i], zlineplot_2[i], ylineplot_2[i], 'r')
 
     def get_mass(self):
         pass
@@ -379,7 +383,7 @@ if __name__ == "__main__":
 
     #CS = CrossSection(a, 4)
     model = FullModel(boompos, (-2.661/2, 2.661/2), 10)
-    a = model.get_all_coordinates()
+    a = model.get_all_boom_coordinates()
     model.plot_structure()
 
     class StructureTestCases(unittest.TestCase):
