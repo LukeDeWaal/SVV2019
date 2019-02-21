@@ -9,6 +9,21 @@ def derive(f, h=10**(-5)):
     return fp
 
 
+def integrate(q):
+
+    def F(z, start_idx=0, end_idx=None):
+        if end_idx is None:
+            end_idx = len(z)-1
+        s = 0.0
+        dz = z[1] - z[0]
+        for idx in range(len(z[start_idx:end_idx])):
+            s += (q(z)[idx]/1.0)*dz
+        s = 1.0*s
+        return s
+
+    return F
+
+
 def newtons_method(f, x0, maxiter=1000):
     fp = derive(f)
     x = x0
