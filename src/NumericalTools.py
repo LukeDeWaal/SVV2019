@@ -9,6 +9,13 @@ def derive(f, h=10**(-5)):
     return fp
 
 
+def step_function(x, x0):
+    if x < x0:
+        return 0.0
+    else:
+        return 1.0
+
+
 def integrate(q):
 
     def F(z, start_idx=0, end_idx=None):

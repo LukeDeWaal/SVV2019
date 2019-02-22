@@ -3,6 +3,7 @@ from src.ForceMomentObjects import Force, Moment, DistributedLoad
 import unittest
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
+from src.NumericalTools import step_function
 
 
 class ForceMomentSystem(object):
@@ -59,7 +60,65 @@ class ForceMomentSystem(object):
             ax.quiver(x, z, y, u, w, v, color='g', length=length*sizefactor, pivot='tail')
 
 
+x1 = 0.172
+x2 = 1.211
+x3 = 2.591
+xa = 0.35
+
+R1z = 146.0e3
+R2z = -214.0e3
+R3z = 83.0e3
+R1y = 7681.0
+R2y = 0.0
+R3y = 7060.0
+Pi  = 112.3e3
+Pii = 97.4e3
+q   = 5.54e3
+
+
+def plot_shear(N):
+
+    def Fy(x, R1z=R1z, R3z=R3z, Pi=Pi, Pii=Pii, ):
+        return -R1z*step_function(x, x1) - Pi*step_function(x, x2-xa/2) + Pii*step_function(x, x2+xa/2) - R3z*step_function(x, x3)
+
+    def Fz(x, R1y=R1y, R2y=R2y, R3y=R3y, q=q):
+        return q*x - R1y*step_function(x, x1) - R2y*step_function(x, x2) - R3y*step_function(x, x3)
+
+    y_shear = []
+    z_shear = []
+
+    xrange = np.linspace(0, 2.661, 100)
+
+    for xi in xrange:
+        y_shear.append(Fy(xi))
+        z_shear.append(Fz(xi))
+
+    ax1 = plt.subplot(211)
+    plt.plot(xrange, y_shear)
+    plt.title('Shear in Y')
+    plt.ylabel('Shear Force [N]')
+    plt.grid()
+
+    ax2 = plt.subplot(212, sharex=ax1)
+    plt.plot(xrange, z_shear)
+    plt.title('Shear in Z')
+    plt.xlabel('x-coordinate [m]')
+    plt.ylabel('Shear Force [N]')
+    plt.grid()
+
+plot_shear(100)
+
 if __name__ == "__main__":
+    # list_of_forces = [Force(np.random.randint(-10, 10, (3, 1)), np.random.randint(-10, 10, (3, 1)))]
+    # list_of_moments = [Moment(np.random.randint(-10, 10, (3, 1)), np.random.randint(-10, 10, (3, 1)))]
+    # list_of_distr_forces = [DistributedLoad(10, np.random.randint(-10, 10, (3, 1)), np.random.randint(-10, 10, (3, 1)),
+    #                                         np.random.randint(-10, 10, (3, 1)), 10)]
+    #
+    # system = ForceMomentSystem(list_of_forces, list_of_moments, list_of_distr_forces)
+    # fig = plt.figure()
+    # ax = Axes3D(fig)
+    # system.plot_force_vectors(ax)
+    # system.plot_moment_vectors(ax)
 
     class ForceMomentSystemTestCases(unittest.TestCase):
 

@@ -8,7 +8,7 @@ import unittest
 
 class Boom(object):
 
-    def __init__(self, size: float = 1.0, density: float = 0.0, position: np.array = np.array([0,0,0])):
+    def __init__(self, size: float = 1.0, density: float = 0.0, position: np.array = np.array([0,0,0]), which='Stiffener', label=0):
         """
         Create a boom object
         :param mass: Mass of boom
@@ -19,7 +19,8 @@ class Boom(object):
         self.__density = density
         self.__size = size
         self.__pos = position
-        self.__type = "Stiffener"
+        self.__type = which
+        self.__label = label
 
     def __str__(self):
         return f"Type: {self.get_type()}, Mass: {self.get_mass()}, Size: {self.get_size()} \nPosition: {self.get_position()}"
@@ -29,6 +30,12 @@ class Boom(object):
 
     def get_type(self):
         return self.__type
+
+    def get_label(self):
+        return self.__label
+
+    def set_label(self, label):
+        self.__label = label
 
     def get_mass(self):
         return self.__density * self.__size
