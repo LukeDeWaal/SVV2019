@@ -9,6 +9,10 @@ def derive(f, h=10**(-5)):
     return fp
 
 
+def pythagoras(a, b):
+    return np.sqrt(a**2+b**2)
+
+
 def step_function(x, x0):
     if x < x0:
         return 0.0
