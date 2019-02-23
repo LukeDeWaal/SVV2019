@@ -2,19 +2,30 @@
 Build the aileron structural idealization here (using skin, booms, etc)
 """
 
-from src.Idealizations import *
+from src.Idealizations import Boom, StraightSkin
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import unittest
 import numpy as np
-from src.NumericalTools import newtons_method, derive
+from src.NumericalTools import newtons_method, derive, pythagoras
 
+pi = np.pi
 
 ha = 0.205
 Ca = 0.605
-pi = np.pi
-h_stringer = 1.6*10**(-2)
 
+t_skin = 1.1*10**(-3)
+t_spar = 2.8*10**(-3)
+
+h_stringer = 1.6*10**(-2)
+w_stringer = 1.9*10**(-2)
+t_stringer = 1.2*10**(-3)
+
+rho_aluminium = 2780.0
+
+
+def area_T_stringer(h, w, t):
+    return (h-t)*t + w*t
 
 def get_crossectional_coordinates(c, h, hs) -> np.array:
     """
@@ -114,18 +125,21 @@ class CrossSection:
 
     @staticmethod
     def __initialize_boom_objects(coordinates) -> list:
-        return [Boom(density=1, size=1, position=coordinate, which='Stiffener') for coordinate in coordinates]
+        return [Boom(density=rho_aluminium, size=1, position=coordinate, which='Stiffener') for coordinate in coordinates]
 
     @staticmethod
     def __initialize_spar_caps(coordinates) -> list:
-        return [Boom(density=1, size=2, position=coordinate, which='Sparcap') for coordinate in coordinates]
+        return [Boom(density=rho_aluminium, size=2, position=coordinate, which='Sparcap') for coordinate in coordinates]
 
     @staticmethod
     def __initialize_skin_objects(boom_objects) -> list:
         skin_objects = []
         i = -1
         while True:
-            skin = StraightSkin(1, 1, boom_objects[i].get_position(), boom_objects[i + 1].get_position())
+            skin = StraightSkin(thickness=t_skin, startpos=boom_objects[i].get_position(),
+                                endpos=boom_objects[i + 1].get_position(),
+                                density=rho_aluminium)
+
             skin_objects.append(skin)
 
             if len(skin_objects) == len(boom_objects):
@@ -319,6 +333,12 @@ class FullModel(object):
         for section in self.get_sections():
             string += str(section)
 
+    def __getitem__(self, index):
+        return self.get_sections()[index]
+
+    def __setitem__(self, index, value):
+        self.get_sections()[index] = value
+
     def __iter__(self):
         self.__cur = 0
         return self
@@ -427,7 +447,7 @@ if __name__ == "__main__":
             self.coordinates = get_crossectional_coordinates(self.Ca, self.ha, self.h_stringer)
 
             self.crosssection = CrossSection(self.coordinates)
-            self.model = FullModel(self.coordinates, (0, 2.661), 100)
+            self.model = FullModel(self.coordinates, (0, 2.661), 25)
 
             self.sqcoordinates = np.array([[-0.5, -0.5], [0.5, -0.5], [0.5, 0.5], [-0.5, 0.5]])
             self.sqmodel = FullModel(self.sqcoordinates, (-0.5, 0.5), 3, sparcaps=False)

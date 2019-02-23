@@ -75,19 +75,37 @@ Pi  = 112.3e3
 Pii = 97.4e3
 q   = 5.54e3
 
+distance_dict = {'x1': x1,
+                 'x2': x2,
+                 'x3': x3,
+                 'xa': xa}
 
-def plot_shear(N):
+force_dict = {'R1': [R1y, R1z],
+              'R2': [R2y, R2z],
+              'R3': [R3y, R3z],
+              'Pi': Pi,
+              'Pii': Pii,
+              'q': q}
 
-    def Fy(x, R1z=R1z, R3z=R3z, Pi=Pi, Pii=Pii, ):
-        return -R1z*step_function(x, x1) - Pi*step_function(x, x2-xa/2) + Pii*step_function(x, x2+xa/2) - R3z*step_function(x, x3)
 
-    def Fz(x, R1y=R1y, R2y=R2y, R3y=R3y, q=q):
-        return q*x - R1y*step_function(x, x1) - R2y*step_function(x, x2) - R3y*step_function(x, x3)
+def plot_shear(N, x_vals, forces):
+
+    def Fy(x):
+        return -forces['R1'][1]*step_function(x, x_vals['x1']) - \
+                forces['Pi']*step_function(x, x_vals['x2']-x_vals['xa']/2) + \
+                forces['Pii']*step_function(x, x_vals['x2']+x_vals['xa']/2) - \
+                forces['R3'][1]*step_function(x, x_vals['x3'])
+
+    def Fz(x):
+        return forces['q']*x - \
+               forces['R1'][0]*step_function(x, x_vals['x1']) - \
+               forces['R2'][0]*step_function(x, x_vals['x2']) - \
+               forces['R3'][0]*step_function(x, x_vals['x3'])
 
     y_shear = []
     z_shear = []
 
-    xrange = np.linspace(0, 2.661, 100)
+    xrange = np.linspace(0, 2.661, N)
 
     for xi in xrange:
         y_shear.append(Fy(xi))
@@ -106,7 +124,23 @@ def plot_shear(N):
     plt.ylabel('Shear Force [N]')
     plt.grid()
 
-plot_shear(100)
+
+def plot_moments(N):
+
+    def Mx():
+        pass
+
+    def My():
+        pass
+
+    def Mz():
+        pass
+
+    pass
+
+
+plot_shear(100, distance_dict, force_dict)
+plot_moments(100)
 
 if __name__ == "__main__":
     # list_of_forces = [Force(np.random.randint(-10, 10, (3, 1)), np.random.randint(-10, 10, (3, 1)))]
