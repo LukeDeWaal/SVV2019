@@ -9,6 +9,12 @@ def derive(f, h=10**(-5)):
     return fp
 
 
+def factorial(n):
+    if n == (1 or 0):
+        return 1
+    return factorial(n-1)*n
+
+
 def pythagoras(a, b):
     return np.sqrt(a**2+b**2)
 

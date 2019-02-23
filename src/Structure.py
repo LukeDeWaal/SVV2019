@@ -13,6 +13,7 @@ pi = np.pi
 
 ha = 0.205
 Ca = 0.605
+ba = 2.661
 
 t_skin = 1.1*10**(-3)
 t_spar = 2.8*10**(-3)
@@ -86,7 +87,7 @@ def plot_crosssection(positions) -> None:
 
 class CrossSection:
 
-    def __init__(self, boom_coordinates, sparcap_coordinates=np.array([[ha/2, ha/2],[-ha/2, ha/2]]), x_coordinate=0):
+    def __init__(self, boom_coordinates, sparcap_coordinates=np.array([[ha/2, ha/2],[-ha/2, ha/2]]), x_coordinate=0, initial_areas=True):
 
         # Pointer
         self.__cur = 0
@@ -100,14 +101,16 @@ class CrossSection:
         self.__sparcap_coordinates   = np.concatenate((np.ones((2, 1)) * self.__x, sparcap_coordinates), axis=1) if sparcap_coordinates is not False else None
 
         # Creating all Boom Objects
-        self.__stiffener_booms = self.__initialize_boom_objects(self.__stiffener_coordinates)
-        self.__spar_booms = self.__initialize_spar_caps(self.__sparcap_coordinates) if self.__sparcap_coordinates is not None else None
+        self.__initial_areas = initial_areas
+        self.__stiffener_booms = self.__initialize_boom_objects(self.__stiffener_coordinates, self.__initial_areas)
+        self.__spar_booms = self.__initialize_spar_caps(self.__sparcap_coordinates, self.__initial_areas) if self.__sparcap_coordinates is not None else None
         self.__all_booms = self.__stiffener_booms
 
         if self.__spar_booms is not None:
             self.__all_booms.insert(0, self.__spar_booms[0])
             self.__all_booms.insert(4, self.__spar_booms[1])
 
+        # Labelling the booms
         for idx in range(len(self.__all_booms)):
             self.__all_booms[idx].set_label(idx)
 
@@ -124,12 +127,18 @@ class CrossSection:
 
 
     @staticmethod
-    def __initialize_boom_objects(coordinates) -> list:
-        return [Boom(density=rho_aluminium, size=1, position=coordinate, which='Stiffener') for coordinate in coordinates]
+    def __initialize_boom_objects(coordinates, initial_areas) -> list:
+        return [Boom(density=rho_aluminium,
+                     size=area_T_stringer(h_stringer, w_stringer, t_stringer) if initial_areas is True else 1.0,
+                     position=coordinate,
+                     which='Stiffener') for coordinate in coordinates]
 
     @staticmethod
-    def __initialize_spar_caps(coordinates) -> list:
-        return [Boom(density=rho_aluminium, size=2, position=coordinate, which='Sparcap') for coordinate in coordinates]
+    def __initialize_spar_caps(coordinates, initial_areas) -> list:
+        return [Boom(density=rho_aluminium,
+                     size=2.0*area_T_stringer(h_stringer, w_stringer, t_stringer) if initial_areas is True else 2.0,
+                     position=coordinate,
+                     which='Sparcap') for coordinate in coordinates]
 
     @staticmethod
     def __initialize_skin_objects(boom_objects) -> list:
@@ -259,6 +268,24 @@ class CrossSection:
         old_size = self.get_all_booms()[idx].get_size()
         self.get_all_booms()[idx].set_size(old_size + size_increment)
 
+    def calculate_boom_area(self, idx: int):
+
+        boom = self[idx]
+        connected_booms = [self[idx + 1], self[idx - 1]]
+
+        if boom.get_type() == 'Sparcap':
+            if idx == 0:
+                connected_booms += [self[4]]
+            elif idx == 4:
+                connected_booms += [self[0]]
+            else:
+                raise TypeError
+
+
+
+
+
+
     def get_mass(self) -> float or int:
         """
         Get total summed up mass of booms and skins
@@ -315,9 +342,10 @@ class CrossSection:
 
 class FullModel(object):
 
-    def __init__(self, coordinates, xrange, N, sparcaps: bool or np.array = np.array([[ha/2, ha/2],[-ha/2, ha/2]])):
+    def __init__(self, coordinates, xrange, N, sparcaps: bool or np.array = np.array([[ha/2, ha/2],[-ha/2, ha/2]]), initial_areas=True):
 
         self.__sections = [None]*N
+        self.__initial_areas = initial_areas
         self.__cur = 0
         self.__boomcoordinates = coordinates
         self.__xrange = xrange
@@ -354,12 +382,21 @@ class FullModel(object):
             return result
 
     def get_N_sections(self):
+        """
+        :return: Amount of crosssections in model
+        """
         return self.__N
 
     def __assemble_structure(self, sparcaps):
-
+        """
+        :param sparcaps: Boolean or Array
+        :return: None
+        """
         for idx, xi in enumerate(np.linspace(self.__xrange[0], self.__xrange[1], self.__N)):
-            self.__sections[idx] = CrossSection(self.__boomcoordinates, sparcap_coordinates=sparcaps, x_coordinate=xi)
+            self.__sections[idx] = CrossSection(self.__boomcoordinates,
+                                                sparcap_coordinates=sparcaps,
+                                                x_coordinate=xi,
+                                                initial_areas=self.__initial_areas)
 
     def get_all_boom_coordinates(self):
 
@@ -447,16 +484,16 @@ if __name__ == "__main__":
             self.coordinates = get_crossectional_coordinates(self.Ca, self.ha, self.h_stringer)
 
             self.crosssection = CrossSection(self.coordinates)
-            self.model = FullModel(self.coordinates, (0, 2.661), 25)
+            self.model = FullModel(self.coordinates, (0, ba), 25)
 
             self.sqcoordinates = np.array([[-0.5, -0.5], [0.5, -0.5], [0.5, 0.5], [-0.5, 0.5]])
-            self.sqmodel = FullModel(self.sqcoordinates, (-0.5, 0.5), 3, sparcaps=False)
+            self.sqmodel = FullModel(self.sqcoordinates, (-0.5, 0.5), 3, sparcaps=False, initial_areas=False)
 
             self.beamcoordinates = np.array([[-2, -1],[2, -1], [2, 1], [-2, 1]])
-            self.beammodel = FullModel(self.beamcoordinates, (-1, 1), 3, sparcaps=False)
+            self.beammodel = FullModel(self.beamcoordinates, (-1, 1), 3, sparcaps=False, initial_areas=False)
 
             self.logcoordinates = np.concatenate((np.log((1 + np.random.randint(np.pi, 2 * np.pi) * np.arange(0, 1, 0.1)).reshape(10, 1)), np.arange(0, 1, 0.1).reshape(10, 1)), axis=1)
-            self.logmodel = FullModel(self.logcoordinates, (-1, 1), 5, sparcaps=False)
+            self.logmodel = FullModel(self.logcoordinates, (-1, 1), 5, sparcaps=False, initial_areas=False)
 
 
         def test_plots(self):
@@ -527,11 +564,14 @@ if __name__ == "__main__":
 
         def test_boom_update(self):
 
+            initial_boom = area_T_stringer(h_stringer, w_stringer, t_stringer)
+            initial_spar = 2.0*initial_boom
+
             for idx in range(len(self.crosssection)):
                 if self.crosssection[idx].get_type() == "Stiffener":
-                    self.assertEqual(self.crosssection[idx].get_size(), 1.0)
+                    self.assertEqual(self.crosssection[idx].get_size(), initial_boom)
                 elif self.crosssection[idx].get_type() == "Sparcap":
-                    self.assertEqual(self.crosssection[idx].get_size(), 2.0)
+                    self.assertEqual(self.crosssection[idx].get_size(), initial_spar)
                 else:
                     raise TypeError
 
@@ -539,10 +579,10 @@ if __name__ == "__main__":
 
             for boom in self.crosssection:
                 if boom.get_type() == 'Stiffener':
-                    self.assertEqual(boom.get_size(), 2.5)
+                    self.assertEqual(boom.get_size(), initial_boom + 1.5)
 
                 elif boom.get_type() == "Sparcap":
-                    self.assertEqual(boom.get_size(), 3.5)
+                    self.assertEqual(boom.get_size(), initial_spar + 1.5)
 
                 else:
                     raise TypeError

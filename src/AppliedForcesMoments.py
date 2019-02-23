@@ -78,11 +78,16 @@ q   = 5.54e3
 distance_dict = {'x1': x1,
                  'x2': x2,
                  'x3': x3,
-                 'xa': xa}
+                 'xa': xa,
+                 'theta': 28.0*np.pi/180.0,
+                 'ba': 2.661,
+                 'ha': 0.205,
+                 'Ca': 0.605
+                }
 
-force_dict = {'R1': [R1y, R1z],
-              'R2': [R2y, R2z],
-              'R3': [R3y, R3z],
+force_dict = {'R1': [0, R1y, R1z],
+              'R2': [0, R2y, R2z],
+              'R3': [0, R3y, R3z],
               'Pi': Pi,
               'Pii': Pii,
               'q': q}
@@ -91,16 +96,16 @@ force_dict = {'R1': [R1y, R1z],
 def plot_shear(N, x_vals, forces):
 
     def Fy(x):
-        return -forces['R1'][1]*step_function(x, x_vals['x1']) - \
+        return -forces['R1'][2]*step_function(x, x_vals['x1']) - \
                 forces['Pi']*step_function(x, x_vals['x2']-x_vals['xa']/2) + \
                 forces['Pii']*step_function(x, x_vals['x2']+x_vals['xa']/2) - \
-                forces['R3'][1]*step_function(x, x_vals['x3'])
+                forces['R3'][2]*step_function(x, x_vals['x3'])
 
     def Fz(x):
         return forces['q']*x - \
-               forces['R1'][0]*step_function(x, x_vals['x1']) - \
-               forces['R2'][0]*step_function(x, x_vals['x2']) - \
-               forces['R3'][0]*step_function(x, x_vals['x3'])
+               forces['R1'][1]*step_function(x, x_vals['x1']) - \
+               forces['R2'][1]*step_function(x, x_vals['x2']) - \
+               forces['R3'][1]*step_function(x, x_vals['x3'])
 
     y_shear = []
     z_shear = []
@@ -110,6 +115,8 @@ def plot_shear(N, x_vals, forces):
     for xi in xrange:
         y_shear.append(Fy(xi))
         z_shear.append(Fz(xi))
+
+    fig = plt.figure()
 
     ax1 = plt.subplot(211)
     plt.plot(xrange, y_shear)
@@ -125,34 +132,62 @@ def plot_shear(N, x_vals, forces):
     plt.grid()
 
 
-def plot_moments(N):
+def plot_moments(N, x_vals, forces):
 
-    def Mx():
-        pass
+    def Mx(x):
+        return - forces['q']*x_vals['ba']*np.cos(x_vals['theta'])*(x_vals['Ca']/4.0 - x_vals['ha']/2.0) \
+               - forces['Pii']*np.cos(x_vals['theta'])*x_vals['ha']/2.0 \
+               + forces['Pii']*np.sin(x_vals['theta'])*x_vals['ha']/2.0 \
+               + forces['Pi']*np.cos(x_vals['theta'])*x_vals['ha']/2.0 \
+               - forces['Pi']*np.sin(x_vals['theta'])*x_vals['ha']/2.0
 
-    def My():
-        pass
+    def My(x):
+        return - forces['R1'][2]*(x - x_vals['x1']) \
+               - forces['Pi']*(x - (x_vals['x2'] - x_vals['xa']/2.0)) \
+               + forces['Pii']*(x - x_vals['x2'] + x_vals['xa']/2.0) \
+               - forces['R3'][2]*(x - x_vals['x3'])
 
-    def Mz():
-        pass
+    def Mz(x):
+        return forces['q']*(x**2)/2.0 \
+               - forces['R1'][1]*(x - x_vals['x1']) \
+               - forces['R2'][1]*(x - x_vals['x2']) \
+               - forces['R3'][1]*(x - x_vals['x3'])
 
-    pass
+    x_moments = []
+    y_moments = []
+    z_moments = []
 
+    xrange = np.linspace(0, 2.661, N)
+
+    for xi in xrange:
+        x_moments.append(Mx(xi))
+        y_moments.append(My(xi))
+        z_moments.append(Mz(xi))
+
+    fig = plt.figure()
+
+    ax1 = plt.subplot(311)
+    plt.plot(xrange, x_moments)
+    plt.title('Moments in X')
+    plt.ylabel('Moment [N*m]')
+    plt.grid()
+
+    ax2 = plt.subplot(312, sharex=ax1)
+    plt.plot(xrange, y_moments)
+    plt.title('Moments in Y')
+    plt.ylabel('Moment [N*m]')
+    plt.grid()
+
+    ax3 = plt.subplot(313, sharex=ax1)
+    plt.plot(xrange, z_moments)
+    plt.title('Moments in Z')
+    plt.ylabel('Moment [N*m]')
+    plt.grid()
 
 plot_shear(100, distance_dict, force_dict)
-plot_moments(100)
+plot_moments(100, distance_dict, force_dict)
 
 if __name__ == "__main__":
-    # list_of_forces = [Force(np.random.randint(-10, 10, (3, 1)), np.random.randint(-10, 10, (3, 1)))]
-    # list_of_moments = [Moment(np.random.randint(-10, 10, (3, 1)), np.random.randint(-10, 10, (3, 1)))]
-    # list_of_distr_forces = [DistributedLoad(10, np.random.randint(-10, 10, (3, 1)), np.random.randint(-10, 10, (3, 1)),
-    #                                         np.random.randint(-10, 10, (3, 1)), 10)]
-    #
-    # system = ForceMomentSystem(list_of_forces, list_of_moments, list_of_distr_forces)
-    # fig = plt.figure()
-    # ax = Axes3D(fig)
-    # system.plot_force_vectors(ax)
-    # system.plot_moment_vectors(ax)
 
     class ForceMomentSystemTestCases(unittest.TestCase):
 
