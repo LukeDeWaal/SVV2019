@@ -9,6 +9,38 @@ def derive(f, h=10**(-5)):
     return fp
 
 
+def factorial(n):
+    if n == (1 or 0):
+        return 1
+    return factorial(n-1)*n
+
+
+def pythagoras(a, b):
+    return np.sqrt(a**2+b**2)
+
+
+def step_function(x, x0):
+    if x < x0:
+        return 0.0
+    else:
+        return 1.0
+
+
+def integrate(q):
+
+    def F(z, start_idx=0, end_idx=None):
+        if end_idx is None:
+            end_idx = len(z)-1
+        s = 0.0
+        dz = z[1] - z[0]
+        for idx in range(len(z[start_idx:end_idx])):
+            s += (q(z)[idx]/1.0)*dz
+        s = 1.0*s
+        return s
+
+    return F
+
+
 def newtons_method(f, x0, maxiter=1000):
     fp = derive(f)
     x = x0
