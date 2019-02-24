@@ -25,6 +25,12 @@ def step_function(x, x0):
     else:
         return 1.0
 
+def reLu(x, x0):
+    if x >= x0:
+        return x - x0
+    else:
+        return 0.0
+
 
 def integrate(q):
 
