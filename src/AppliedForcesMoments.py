@@ -3,7 +3,7 @@ from src.ForceMomentObjects import Force, Moment, DistributedLoad
 import unittest
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
-from src.NumericalTools import step_function
+from src.NumericalTools import step_function, reLu
 
 
 class ForceMomentSystem(object):
@@ -60,52 +60,46 @@ class ForceMomentSystem(object):
             ax.quiver(x, z, y, u, w, v, color='g', length=length*sizefactor, pivot='tail')
 
 
-x1 = 0.172
-x2 = 1.211
-x3 = 2.591
-xa = 0.35
 
-R1z = 146.0e3
-R2z = -214.0e3
-R3z = 83.0e3
-R1y = 7681.0
-R2y = 0.0
-R3y = 7060.0
-Pi  = 112.3e3
+Pi  = 104.4114e3
 Pii = 97.4e3
 q   = 5.54e3
 
-distance_dict = {'x1': x1,
-                 'x2': x2,
-                 'x3': x3,
-                 'xa': xa,
+distance_dict = {'x1': 0.172,
+                 'x2': 1.211,
+                 'x3': 2.591,
+                 'xa': 0.35,
                  'theta': 28.0*np.pi/180.0,
                  'ba': 2.661,
                  'ha': 0.205,
                  'Ca': 0.605
                 }
 
-force_dict = {'R1': [0, R1y, R1z],
-              'R2': [0, R2y, R2z],
-              'R3': [0, R3y, R3z],
-              'Pi': Pi,
-              'Pii': Pii,
-              'q': q}
+force_dict = {'R1':  [0, 16.1018703e3, -159.47474e3],
+              'R2':  [0, -31.653781e3, 244.549859e3],
+              'R3':  [0, 25.276613e3, -98.186753e3],
+              'Pi':  [0, Pi*np.sin(distance_dict['theta']), Pi*np.cos(distance_dict['theta'])],
+              'Pii': [0, Pii*np.sin(distance_dict['theta']), Pii*np.cos(distance_dict['theta'])],
+              'q':   [0, q*np.cos(distance_dict['theta']), q*np.sin(distance_dict['theta'])]}
 
 
 def plot_shear(N, x_vals, forces):
 
     def Fy(x):
-        return -forces['R1'][2]*step_function(x, x_vals['x1']) - \
-                forces['Pi']*step_function(x, x_vals['x2']-x_vals['xa']/2) + \
-                forces['Pii']*step_function(x, x_vals['x2']+x_vals['xa']/2) - \
-                forces['R3'][2]*step_function(x, x_vals['x3'])
+        return - forces['q'][1]  * x \
+               + forces['R1'][1] * step_function(x, x_vals['x1'])\
+               + forces['R3'][1] * step_function(x, x_vals['x3'])\
+               + forces['R2'][1] * step_function(x, x_vals['x2'])\
+               + forces['Pi'][1] * step_function(x, x_vals['x2']-x_vals['xa']/2.0) \
+               - forces['Pii'][1]* step_function(x, x_vals['x2']+x_vals['xa']/2.0)
 
     def Fz(x):
-        return forces['q']*x - \
-               forces['R1'][1]*step_function(x, x_vals['x1']) - \
-               forces['R2'][1]*step_function(x, x_vals['x2']) - \
-               forces['R3'][1]*step_function(x, x_vals['x3'])
+        return + forces['q'][2]  * x \
+               + forces['R1'][2] * step_function(x, x_vals['x1']) \
+               + forces['R2'][2] * step_function(x, x_vals['x2']) \
+               + forces['R3'][2] * step_function(x, x_vals['x3']) \
+               + forces['Pi'][2] * step_function(x, x_vals['x2'] - x_vals['xa']/2) \
+               - forces['Pii'][2]* step_function(x, x_vals['x2'] + x_vals['xa']/2)
 
     y_shear = []
     z_shear = []
@@ -135,11 +129,11 @@ def plot_shear(N, x_vals, forces):
 def plot_moments(N, x_vals, forces):
 
     def Mx(x):
-        return - forces['q']*x_vals['ba']*np.cos(x_vals['theta'])*(x_vals['Ca']/4.0 - x_vals['ha']/2.0) \
-               - forces['Pii']*np.cos(x_vals['theta'])*x_vals['ha']/2.0 \
-               + forces['Pii']*np.sin(x_vals['theta'])*x_vals['ha']/2.0 \
-               + forces['Pi']*np.cos(x_vals['theta'])*x_vals['ha']/2.0 \
-               - forces['Pi']*np.sin(x_vals['theta'])*x_vals['ha']/2.0
+        return - forces['q'] * x * np.cos(x_vals['theta'])*(x_vals['Ca']/4.0-x_vals['ha']/2.0) \
+               + forces['Pi'] * np.cos(x_vals['theta'])*x_vals['ha']/2.0*reLu(x, x_vals['x2']-x_vals['xa']/2.0) \
+               - forces['Pi'] * np.sin(x_vals['theta'])*x_vals['ha']/2.0*reLu(x, x_vals['x2']-x_vals['xa']/2.0) \
+               - forces['Pii'] * np.cos(x_vals['theta']) * x_vals['ha'] / 2.0 * reLu(x, x_vals['x2'] + x_vals['xa'] / 2.0) \
+               + forces['Pii'] * np.sin(x_vals['theta']) * x_vals['ha'] / 2.0 * reLu(x, x_vals['x2'] + x_vals['xa'] / 2.0)
 
     def My(x):
         return - forces['R1'][2]*(x - x_vals['x1']) \
@@ -184,8 +178,8 @@ def plot_moments(N, x_vals, forces):
     plt.ylabel('Moment [N*m]')
     plt.grid()
 
-plot_shear(100, distance_dict, force_dict)
-plot_moments(100, distance_dict, force_dict)
+plot_shear(1000, distance_dict, force_dict)
+#plot_moments(1000, distance_dict, force_dict)
 
 if __name__ == "__main__":
 
