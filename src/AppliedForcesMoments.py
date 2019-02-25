@@ -1,9 +1,9 @@
 import numpy as np
-from ForceMomentObjects import Force, Moment, DistributedLoad
+from src.ForceMomentObjects import Force, Moment, DistributedLoad
 import unittest
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
-from NumericalTools import step_function, reLu
+from src.NumericalTools import step_function, reLu
 
 
 class ForceMomentSystem(object):
