@@ -3,16 +3,13 @@ Build the aileron structural idealization here (using skin, booms, etc)
 """
 
 from src.Idealizations import Boom, StraightSkin
-from Idealizations import *
 
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import unittest
 import numpy as np
-from src.NumericalTools import newtons_method, derive, pythagoras
+from src.NumericalTools import newtons_method, coordinate_transformation
 pi = np.pi
-
-
 
 ha = 0.205
 Ca = 0.605
@@ -84,7 +81,7 @@ def get_crossectional_coordinates(c, h, hs) -> np.array:
 
 
 def plot_crosssection(positions) -> None:
-
+    yp = []
     plt.scatter(positions[:,1], positions[:,2])
     plt.axes().set_aspect('equal')
     plt.grid(True)
@@ -242,6 +239,20 @@ class CrossSection:
 
         return np.array([self.__x, ybar, zbar])
 
+    @staticmethod
+    def angle_between(v1, v2):
+        """ Returns the angle in radians between vectors 'v1' and 'v2'::
+        #>>> angle_between((1, 0, 0), (0, 1, 0))
+        1.5707963267948966
+        #>>> angle_between((1, 0, 0), (1, 0, 0))
+        0.0
+        #>>> angle_between((1, 0, 0), (-1, 0, 0))
+        3.141592653589793
+        """
+        v1_u = v1/np.linalg.norm(v1)
+        v2_u = v2/np.linalg.norm(v2)
+        return np.arccos(np.clip(np.dot(v1_u, v2_u), -1.0, 1.0))
+
     def area_MOI(self, axes: str) -> float or int:
         """
         Calculate the MOI with the defined axes
@@ -250,13 +261,13 @@ class CrossSection:
         """
         MOI = 0
 
-        if axes == ('z' or 'zz'):
+        if axes == 'z' or axes == 'zz':
             idx1 = idx2 = 1
 
-        elif axes == ('y' or 'yy'):
+        elif axes == 'y' or axes == 'yy':
             idx1 = idx2 = 2
 
-        elif axes == ('zy' or 'yz'):
+        elif axes == 'zy' or axes == 'yz':
             idx1 = 1
             idx2 = 2
 
@@ -265,6 +276,40 @@ class CrossSection:
 
         for boom in self.get_all_booms():
             MOI += boom.get_size() * (boom.get_position()[idx1] * boom.get_position()[idx2])
+
+        return MOI
+
+    def real_MOI(self, axes: str) -> float or int:
+        """
+        Calculate the MOI with the defined axes
+        :param axes: 'z', 'zz', 'y', 'yy', 'zy'
+        :return: MOI around defined axes
+        """
+        MOI = 0
+
+        if axes == 'z' or axes == 'zz':
+            idx1 = idx2 = 1
+
+        elif axes == 'y' or axes == 'yy':
+            idx1 = idx2 = 2
+
+        elif axes == 'zy' or axes == 'yz':
+            idx1 = 1
+            idx2 = 2
+
+        else:
+            return -1
+
+        for boom in self.get_all_booms():
+            MOI += boom.get_size() * (boom.get_position()[idx1] * boom.get_position()[idx2])
+
+        for skin in self.get_skin_objects():
+
+            angle = self.angle_between(np.array([0, 0, 1]), skin.get_position('end') - skin.get_position('start'))
+            angularterms = [0, np.sin(angle), np.cos(angle)]
+
+            MOI += 1.0 / 12.0 * skin.get_thickness() * (skin.get_length() ** 3) * (angularterms[idx1]*angularterms[idx2])
+
         return MOI
 
     def update_boom_area(self, idx: int, size_increment: int or float):
@@ -422,7 +467,7 @@ class FullModel(object):
     def plot_structure(self, ax):
 
         # Boom Coordinates
-        coordinates = self.get_all_boom_coordinates()
+        coordinates = np.array([coordinate_transformation(p) for p in self.get_all_boom_coordinates()])
         xboomplot = coordinates[:, 0]
         yboomplot = coordinates[:, 1]
         zboomplot = coordinates[:, 2]
@@ -432,6 +477,7 @@ class FullModel(object):
         ax.set_zlim3d(-0.3, 0.3)
 
         # Lines around crosssection
+        #TODO: Fix Lines between booms
         xlineplot_1 = [[] for _ in range(self.__N)]
         ylineplot_1 = [[] for _ in range(self.__N)]
         zlineplot_1 = [[] for _ in range(self.__N)]

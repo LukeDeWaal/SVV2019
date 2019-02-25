@@ -3,8 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="580e7e6b-b616-44ec-9938-20505707976d" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/AppliedForcesMoments.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/AppliedForcesMoments.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Idealizations.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Idealizations.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/NumericalTools.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/NumericalTools.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Structure.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Structure.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -18,11 +19,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Idealizations.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="357">
-              <caret line="22" column="17" selection-start-line="22" selection-start-column="17" selection-end-line="22" selection-end-column="17" />
+            <state relative-caret-position="-170">
+              <caret line="71" column="11" lean-forward="true" selection-start-line="71" selection-start-column="11" selection-end-line="71" selection-end-column="11" />
             </state>
           </provider>
         </entry>
@@ -30,8 +31,20 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Structure.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="8993">
-              <caret line="534" selection-start-line="534" selection-end-line="534" />
+            <state relative-caret-position="-1122">
+              <caret line="285" column="40" lean-forward="true" selection-start-line="285" selection-start-column="40" selection-end-line="285" selection-end-column="40" />
+              <folding>
+                <element signature="e#81#129#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/StructuralCalculations/Bending.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="255">
+              <caret line="15" selection-start-line="15" selection-end-line="15" />
             </state>
           </provider>
         </entry>
@@ -39,8 +52,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/ForceMomentObjects.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1666">
-              <caret line="99" selection-start-line="99" selection-end-line="99" />
+            <state relative-caret-position="136">
+              <caret line="9" column="28" selection-start-line="9" selection-start-column="28" selection-end-line="9" selection-end-column="28" />
             </state>
           </provider>
         </entry>
@@ -58,7 +71,7 @@
         <entry file="file://$PROJECT_DIR$/src/AppliedForcesMoments.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="-1241">
-              <caret line="7" lean-forward="true" selection-start-line="7" selection-end-line="7" />
+              <caret line="7" selection-start-line="7" selection-end-line="7" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -78,11 +91,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/NumericalTools.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="373">
-              <caret line="70" column="21" selection-start-line="70" selection-start-column="21" selection-end-line="70" selection-end-column="21" />
+            <state relative-caret-position="316">
+              <caret line="69" column="44" selection-start-line="69" selection-start-column="44" selection-end-line="69" selection-end-column="44" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -116,10 +129,10 @@
         <option value="$PROJECT_DIR$/src/StructuralCalculations/Torsion.py" />
         <option value="$PROJECT_DIR$/src/ForceMomentObjects.py" />
         <option value="$PROJECT_DIR$/src/main.py" />
-        <option value="$PROJECT_DIR$/src/Idealizations.py" />
-        <option value="$PROJECT_DIR$/src/Structure.py" />
         <option value="$PROJECT_DIR$/src/AppliedForcesMoments.py" />
         <option value="$PROJECT_DIR$/src/NumericalTools.py" />
+        <option value="$PROJECT_DIR$/src/Idealizations.py" />
+        <option value="$PROJECT_DIR$/src/Structure.py" />
       </list>
     </option>
   </component>
@@ -179,11 +192,14 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.NumericalTools">
+  <component name="RunManager" selected="Python.Structure">
     <configuration name="AppliedForcesMoments" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="SVV2019" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src" />
       <option name="IS_MODULE_SDK" value="true" />
@@ -244,9 +260,6 @@
       <module name="SVV2019" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src" />
       <option name="IS_MODULE_SDK" value="true" />
@@ -293,9 +306,9 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.Structure" />
         <item itemvalue="Python.NumericalTools" />
         <item itemvalue="Python.AppliedForcesMoments" />
-        <item itemvalue="Python.Structure" />
         <item itemvalue="Python.main" />
         <item itemvalue="Python.ForceMomentObjects" />
       </list>
@@ -320,17 +333,18 @@
       <workItem from="1550754267510" duration="10930000" />
       <workItem from="1550849040896" duration="5372000" />
       <workItem from="1551009440812" duration="7714000" />
-      <workItem from="1551099769077" duration="2753000" />
+      <workItem from="1551099769077" duration="9200000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="78385000" />
+    <option name="totallyTimeSpent" value="84832000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.1652452" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.1652452" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -345,7 +359,7 @@
       <window_info anchor="bottom" id="Database Changes" order="9" show_stripe_button="false" />
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.50053304" side_tool="true" weight="0.32936078" />
       <window_info anchor="bottom" id="Terminal" order="11" />
-      <window_info active="true" anchor="bottom" id="Python Console" order="12" sideWeight="0.49946696" visible="true" weight="0.30769232" />
+      <window_info anchor="bottom" id="Python Console" order="12" sideWeight="0.49946696" visible="true" weight="0.30769232" />
       <window_info active="true" anchor="bottom" id="Concurrent Activities Diagram" order="13" weight="0.32936078" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -393,13 +407,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/StructuralCalculations/Bending.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="15" selection-start-line="15" selection-end-line="15" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/sourcecode_readme.txt">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -418,31 +425,27 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/.pytest_cache/README.md" />
-    <entry file="file://$PROJECT_DIR$/src/Idealizations.py">
+    <entry file="file://$PROJECT_DIR$/src/StructuralCalculations/Torsion.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="22" column="17" selection-start-line="22" selection-start-column="17" selection-end-line="22" selection-end-column="17" />
+        <state relative-caret-position="136">
+          <caret line="8" column="12" selection-start-line="8" selection-start-column="12" selection-end-line="8" selection-end-column="12" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Structure.py">
+    <entry file="file://$PROJECT_DIR$/src/AppliedForcesMoments.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="8993">
-          <caret line="534" selection-start-line="534" selection-end-line="534" />
+        <state relative-caret-position="-1241">
+          <caret line="7" selection-start-line="7" selection-end-line="7" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/ForceMomentObjects.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1666">
-          <caret line="99" selection-start-line="99" selection-end-line="99" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/StructuralCalculations/Torsion.py">
-      <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="136">
-          <caret line="8" column="12" selection-start-line="8" selection-start-column="12" selection-end-line="8" selection-end-column="12" />
+          <caret line="9" column="28" selection-start-line="9" selection-start-column="28" selection-end-line="9" selection-end-column="28" />
         </state>
       </provider>
     </entry>
@@ -456,23 +459,37 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/AppliedForcesMoments.py">
+    <entry file="file://$PROJECT_DIR$/src/NumericalTools.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1241">
-          <caret line="7" lean-forward="true" selection-start-line="7" selection-end-line="7" />
+        <state relative-caret-position="316">
+          <caret line="69" column="44" selection-start-line="69" selection-start-column="44" selection-end-line="69" selection-end-column="44" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/NumericalTools.py">
+    <entry file="file://$PROJECT_DIR$/src/StructuralCalculations/Bending.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="373">
-          <caret line="70" column="21" selection-start-line="70" selection-start-column="21" selection-end-line="70" selection-end-column="21" />
+        <state relative-caret-position="255">
+          <caret line="15" selection-start-line="15" selection-end-line="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Structure.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1122">
+          <caret line="285" column="40" lean-forward="true" selection-start-line="285" selection-start-column="40" selection-end-line="285" selection-end-column="40" />
           <folding>
-            <element signature="e#0#18#0" expanded="true" />
+            <element signature="e#81#129#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Idealizations.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-170">
+          <caret line="71" column="11" lean-forward="true" selection-start-line="71" selection-start-column="11" selection-end-line="71" selection-end-column="11" />
         </state>
       </provider>
     </entry>

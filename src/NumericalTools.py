@@ -67,10 +67,24 @@ def coordinate_reflection(point: np.array, plane_normal: np.array):
     a, b, c = plane_normal
 
     A = np.array([[1-2*a**2, -2*a*b, -2*a*c],
-                  [-2*a*b, 1-2*b**2], -2*b*c,
-                  [-2*a*c, -2*b*c, 1-2*c**2]])
+                  [-2*a*b, 1-2*b**2, -2*b*c],
+                  [-2*a*c, -2*b*c, 1-2*c**2]], dtype=float)
 
-    return np.matmul(A, point.reshape((len(point), 1)))
+
+    point = point.reshape((len(point), 1))
+
+    print(A)
+    print(point)
+
+    return np.matmul(A, point.astype(float))
+
+
+def coordinate_transformation(point: np.array):
+
+    p_i = coordinate_rotation(point, np.array([1,0,0]), -28.0*np.pi/180.0)
+    p_ii = coordinate_reflection(p_i, np.array([0,1,0]))
+
+    return p_ii
 
 
 if __name__ == "__main__":

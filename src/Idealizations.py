@@ -68,7 +68,7 @@ class Boom(object):
 
 class StraightSkin(object):
 
-    def __init__(self, thickness: float = 0.001, startpos: np.array = np.array([0, 0, 0]), endpos: np.array = np.array([0, 0, 0]), density: float = 0.0):
+    def __init__(self, thickness: float = 0.0011, startpos: np.array = np.array([0, 0, 0]), endpos: np.array = np.array([0, 0, 0]), density: float = 0.0):
         """
         Create a skin object (to connect booms)
         :param mass: Mass of skin
