@@ -94,12 +94,12 @@ def plot_shear(N, x_vals, forces):
                - forces['Pii'][1]* step_function(x, x_vals['x2']+x_vals['xa']/2.0)
 
     def Fz(x):
-        return + forces['q'][2]  * x \
-               + forces['R1'][2] * step_function(x, x_vals['x1']) \
-               + forces['R2'][2] * step_function(x, x_vals['x2']) \
-               + forces['R3'][2] * step_function(x, x_vals['x3']) \
-               + forces['Pi'][2] * step_function(x, x_vals['x2'] - x_vals['xa']/2) \
-               - forces['Pii'][2]* step_function(x, x_vals['x2'] + x_vals['xa']/2)
+        return - forces['q'][2]  * x \
+               - forces['R1'][2] * step_function(x, x_vals['x1']) \
+               - forces['R2'][2] * step_function(x, x_vals['x2']) \
+               - forces['R3'][2] * step_function(x, x_vals['x3']) \
+               - forces['Pi'][2] * step_function(x, (x_vals['x2'] - x_vals['xa']/2)) \
+               + forces['Pii'][2]* step_function(x, (x_vals['x2'] + x_vals['xa']/2))
 
     y_shear = []
     z_shear = []
@@ -139,12 +139,12 @@ def plot_moments(N, x_vals, forces):
 
     def My(x):
 
-        return (+forces['q'][2]*(x**2)/2\
-               +forces['R1'][2]*reLu(x,x_vals['x1'])\
-               +forces['Pi'][2]*reLu(x,(x_vals['x2']-x_vals['xa']/2))\
-               +forces['R2'][2] * reLu(x, x_vals['x2'])\
-               -forces['Pii'][2]*reLu(x, (x_vals['x2']+x_vals['xa']/2))\
-               +forces['R3'][2]*reLu(x, x_vals['x3']))*-1
+        return -forces['q'][2]*(x**2)/2\
+               -forces['R1'][2]*reLu(x,x_vals['x1'])\
+               -forces['Pi'][2]*reLu(x,(x_vals['x2']-x_vals['xa']/2))\
+               -forces['R2'][2] * reLu(x, x_vals['x2'])\
+               +forces['Pii'][2]*reLu(x, (x_vals['x2']+x_vals['xa']/2))\
+               -forces['R3'][2]*reLu(x, x_vals['x3'])
 
 
     def Mz(x):
