@@ -2,14 +2,14 @@
 Build the aileron structural idealization here (using skin, booms, etc)
 """
 
-from src.Idealizations import Boom, StraightSkin
+from Idealizations import Boom, StraightSkin
 from Idealizations import *
 
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import unittest
 import numpy as np
-from src.NumericalTools import newtons_method, derive, pythagoras
+from NumericalTools import newtons_method, derive, pythagoras
 pi = np.pi
 
 
