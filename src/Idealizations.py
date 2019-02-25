@@ -50,8 +50,12 @@ class Boom(object):
 
     def area_MOI(self, axis1, axis2=None):
         pass
-
-
+    
+    def det_distance(self, boom2):
+        """Determines the distance from 1 boom to another boom, x,y and z directions
+        and returns it as a vector"""
+        return np.sqrt((self.get_position()- boom2.get_position()) ** 2)
+        
 class StraightSkin(object):
 
     def __init__(self, mass: float = 0, thickness: float = 0, startpos: np.array = np.array([0, 0, 0]), endpos: np.array = np.array([0, 0, 0])):
