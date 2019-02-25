@@ -1,12 +1,15 @@
 import numpy as np
+from src.Structure import CrossSection, get_crossectional_coordinates
 """
 Bending Calculations
 """
 
 
+
 class NumericalBending:
 
     def __init__(self, cross_section):
+
         self.__cross_section = cross_section
 
     def calculate_bending_stress(self, Mz, My):
@@ -62,3 +65,16 @@ class NumericalBending:
 
     def calculate_bending_deflection(self):
         pass
+
+
+if __name__ == "__main__":
+    ha = 0.205
+    Ca = 0.605
+    h_stringer = 1.6 * 10 ** (-2)
+
+    coordinates = get_crossectional_coordinates(Ca, ha, h_stringer)
+    CS = CrossSection(coordinates, initial_areas=True)
+
+    calculations = NumericalBending(CS)
+
+    BendingStress = calculations.calculate_bending_stress()

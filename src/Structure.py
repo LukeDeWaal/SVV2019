@@ -140,7 +140,7 @@ class CrossSection:
     @staticmethod
     def __initialize_spar_caps(coordinates, initial_areas) -> list:
         return [Boom(density=rho_aluminium,
-                     size=2.0*area_T_stringer(h_stringer, w_stringer, t_stringer) if initial_areas is True else 2.0,
+                     size=1/6*t_spar*ha if initial_areas is True else 2.0,
                      position=coordinate,
                      which='Sparcap') for coordinate in coordinates]
 
@@ -251,7 +251,7 @@ class CrossSection:
         """
         v1_u = v1/np.linalg.norm(v1)
         v2_u = v2/np.linalg.norm(v2)
-        return np.arccos(np.clip(np.dot(v1_u, v2_u), -1.0, 1.0))
+        return np.arccos(np.dot(v1_u, v2_u))
 
     def area_MOI(self, axes: str) -> float or int:
         """
@@ -308,7 +308,9 @@ class CrossSection:
             angle = self.angle_between(np.array([0, 0, 1]), skin.get_position('end') - skin.get_position('start'))
             angularterms = [0, np.sin(angle), np.cos(angle)]
 
-            MOI += 1.0 / 12.0 * skin.get_thickness() * (skin.get_length() ** 3) * (angularterms[idx1]*angularterms[idx2])
+            #TODO: Check Steiner term for skins
+            MOI += 1.0 / 12.0 * skin.get_thickness() * (skin.get_length() ** 3) * (angularterms[idx1]*angularterms[idx2]) + skin.get_area()*(skin.get_center()[idx1]*skin.get_center()[idx2])
+            print(1.0 / 12.0 * skin.get_thickness() * (skin.get_length() ** 3) * (angularterms[idx1]*angularterms[idx2]) + skin.get_area()*(skin.get_center()[idx1]*skin.get_center()[idx2]))
 
         return MOI
 
@@ -332,11 +334,6 @@ class CrossSection:
                 connected_booms += [self[0]]
             else:
                 raise TypeError
-
-
-
-
-
 
     def get_mass(self) -> float or int:
         """
@@ -433,6 +430,10 @@ class FullModel(object):
             self.__cur += 1
             return result
 
+    def transform_coordinates(self):
+
+        coordinates = [coordinate_transformation(p) for p in self.get_all_boom_coordinates()]
+
     def get_N_sections(self):
         """
         :return: Amount of crosssections in model
@@ -467,7 +468,7 @@ class FullModel(object):
     def plot_structure(self, ax):
 
         # Boom Coordinates
-        coordinates = np.array([coordinate_transformation(p) for p in self.get_all_boom_coordinates()])
+        coordinates = self.get_all_boom_coordinates()
         xboomplot = coordinates[:, 0]
         yboomplot = coordinates[:, 1]
         zboomplot = coordinates[:, 2]
@@ -615,10 +616,14 @@ if __name__ == "__main__":
                     if axis == 'zy':
                         self.assertNotEqual(MOI, 0.0)
 
+        def test_real_MOI(self):
+
+            print(self.crosssection.real_MOI('zz'))
+
         def test_boom_update(self):
 
             initial_boom = area_T_stringer(h_stringer, w_stringer, t_stringer)
-            initial_spar = 2.0*initial_boom
+            initial_spar = 1/6*t_spar*ha
 
             for idx in range(len(self.crosssection)):
                 if self.crosssection[idx].get_type() == "Stiffener":

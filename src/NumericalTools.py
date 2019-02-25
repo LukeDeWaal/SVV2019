@@ -73,9 +73,6 @@ def coordinate_reflection(point: np.array, plane_normal: np.array):
 
     point = point.reshape((len(point), 1))
 
-    print(A)
-    print(point)
-
     return np.matmul(A, point.astype(float))
 
 

@@ -91,6 +91,12 @@ class StraightSkin(object):
     def set_density(self, density):
         self.__density = density
 
+    def get_area(self):
+        return self.__t * self.get_length()
+
+    def get_center(self):
+        return (self.get_position('end')-self.get_position('start'))*0.5*self.get_length()+self.get_position('start')
+
     def get_mass(self):
         return self.__t*np.linalg.norm(self.__start - self.__end)*self.__density
 
