@@ -1,9 +1,9 @@
 import numpy as np
-from src.ForceMomentObjects import Force, Moment, DistributedLoad
+from ForceMomentObjects import Force, Moment, DistributedLoad
 import unittest
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
-from src.NumericalTools import step_function, reLu
+from NumericalTools import step_function, reLu
 
 
 class ForceMomentSystem(object):
@@ -124,28 +124,37 @@ def plot_shear(N, x_vals, forces):
     plt.xlabel('x-coordinate [m]')
     plt.ylabel('Shear Force [N]')
     plt.grid()
+    plt.show()
 
 
 def plot_moments(N, x_vals, forces):
 
     def Mx(x):
-        return - forces['q'] * x * np.cos(x_vals['theta'])*(x_vals['Ca']/4.0-x_vals['ha']/2.0) \
-               + forces['Pi'] * np.cos(x_vals['theta'])*x_vals['ha']/2.0*reLu(x, x_vals['x2']-x_vals['xa']/2.0) \
-               - forces['Pi'] * np.sin(x_vals['theta'])*x_vals['ha']/2.0*reLu(x, x_vals['x2']-x_vals['xa']/2.0) \
-               - forces['Pii'] * np.cos(x_vals['theta']) * x_vals['ha'] / 2.0 * reLu(x, x_vals['x2'] + x_vals['xa'] / 2.0) \
-               + forces['Pii'] * np.sin(x_vals['theta']) * x_vals['ha'] / 2.0 * reLu(x, x_vals['x2'] + x_vals['xa'] / 2.0)
+
+        return (+ forces['q'][1] * x *abs(x_vals['Ca']/4-x_vals['ha']/2)\
+               - forces['Pi'][2] * x_vals['ha']/2 *step_function(x,(x_vals['x2']-x_vals['xa']/2))\
+               + forces['Pi'][1] * x_vals['ha'] / 2 * step_function(x, (x_vals['x2'] - x_vals['xa'] / 2))\
+               - forces['Pii'][1] * x_vals['ha'] / 2 * step_function(x, (x_vals['x2'] + x_vals['xa'] / 2))\
+               + forces['Pii'][2] * x_vals['ha'] / 2 * step_function(x, (x_vals['x2'] + x_vals['xa'] / 2)))*-1
 
     def My(x):
-        return - forces['R1'][2]*(x - x_vals['x1']) \
-               - forces['Pi']*(x - (x_vals['x2'] - x_vals['xa']/2.0)) \
-               + forces['Pii']*(x - x_vals['x2'] + x_vals['xa']/2.0) \
-               - forces['R3'][2]*(x - x_vals['x3'])
+
+        return (+forces['q'][2]*(x**2)/2\
+               +forces['R1'][2]*reLu(x,x_vals['x1'])\
+               +forces['Pi'][2]*reLu(x,(x_vals['x2']-x_vals['xa']/2))\
+               +forces['R2'][2] * reLu(x, x_vals['x2'])\
+               -forces['Pii'][2]*reLu(x, (x_vals['x2']+x_vals['xa']/2))\
+               +forces['R3'][2]*reLu(x, x_vals['x3']))*-1
+
 
     def Mz(x):
-        return forces['q']*(x**2)/2.0 \
-               - forces['R1'][1]*(x - x_vals['x1']) \
-               - forces['R2'][1]*(x - x_vals['x2']) \
-               - forces['R3'][1]*(x - x_vals['x3'])
+
+        return +forces['q'][1]*(x**2)/2 \
+               -forces['R1'][1]*reLu(x,x_vals['x1'])\
+               -forces['Pi'][1]*reLu(x,(x_vals['x2']-x_vals['xa']/2))\
+               -forces['R2'][1]*reLu(x, x_vals['x2'])\
+               +forces['Pii'][1]*reLu(x, (x_vals['x2']+x_vals['xa']/2))\
+               -forces['R3'][1]*reLu(x,x_vals['x3'])
 
     x_moments = []
     y_moments = []
@@ -177,9 +186,10 @@ def plot_moments(N, x_vals, forces):
     plt.title('Moments in Z')
     plt.ylabel('Moment [N*m]')
     plt.grid()
+    plt.show()
 
 plot_shear(1000, distance_dict, force_dict)
-#plot_moments(1000, distance_dict, force_dict)
+plot_moments(1000, distance_dict, force_dict)
 
 if __name__ == "__main__":
 
