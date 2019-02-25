@@ -3,13 +3,16 @@ Build the aileron structural idealization here (using skin, booms, etc)
 """
 
 from src.Idealizations import Boom, StraightSkin
+from Idealizations import *
+
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import unittest
 import numpy as np
 from src.NumericalTools import newtons_method, derive, pythagoras
-
 pi = np.pi
+
+
 
 ha = 0.205
 Ca = 0.605
@@ -27,6 +30,10 @@ rho_aluminium = 2780.0
 
 def area_T_stringer(h, w, t):
     return (h-t)*t + w*t
+
+def get_globals():
+    """returns the globals"""
+    return ha, Ca, pi, h_stringer
 
 def get_crossectional_coordinates(c, h, hs) -> np.array:
     """
