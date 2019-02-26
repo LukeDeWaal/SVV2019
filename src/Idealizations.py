@@ -65,6 +65,11 @@ class Boom(object):
         """Determines the vector going from boom 2 TOO SELF in x,y and z directions
         and returns it as a vector"""
         return (self.get_position()- boom2.get_position())
+    
+    def update_position(self, delta_positions):
+        """Given delta positions, the position of the boom is updated.
+        Useful for when changing the axis origin"""
+        self.__pos += delta_positions
 
 class StraightSkin(object):
 
