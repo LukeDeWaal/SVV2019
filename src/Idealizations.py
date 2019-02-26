@@ -62,7 +62,7 @@ class Boom(object):
         pass
     
     def det_distance(self, boom2):
-        """Determines the vector going from boom 2 TOO SELF IN x,y and z directions
+        """Determines the vector going from boom 2 TOO SELF in x,y and z directions
         and returns it as a vector"""
         return (self.get_position()- boom2.get_position())
 

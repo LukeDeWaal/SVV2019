@@ -23,13 +23,15 @@ def main():
     boom_sec1, boom_sec2 = split_booms(booms)
     #print(boom_sec1[0].get_size())
     
-    #create the force acting on the cross section
+    ##########create the force acting on the cross section##########
     
     """For test cases:
     1 = forces are 100N in both directions
     2 = 100N in positive y direction
     3 = 100N in positive z direction"""
-    force_y, force_z = test_cases(1) #y is up, z is towards TE
+    force_y, force_z = test_cases(3) #y is up, z is towards TE
+    
+    ########################
     
     force_spar = Force(np.array([0, force_y, force_z]), np.array([boom_sec1[0].get_position()[0],0,boom_sec1[0].get_position()[2]]))
     '''force acting at middle of the spar'''
@@ -41,23 +43,23 @@ def main():
     #determine eq for q0s in both sections in sec 1 and sec 2 using sum of moments a the lowest spar boom
     mat_ordered = order_booms(Vshear_flows1, Vshear_flows2, boom_sec1, boom_sec2, xsec) #orderes the matrix nicer
     base_shear_flow1, base_shear_flow2, rotation  = det_base_shearflow(mat_ordered, force_spar)
-    
+
     total_shearflows = combined_shearflow(base_shear_flow1, base_shear_flow2, mat_ordered)
-    
+
     ############print stuff#############
-    print("base shear flows \n")
-    print ("base shear flow section 1 is")
-    print(base_shear_flow1)
-    print ("base shear flow section 2 is")
-    print(base_shear_flow2)
-    print('')
-    print("variable shear flows \n")
-    print ("variable shear flow in all sections is")
-    for i in mat_ordered[:,3]: print(i)
-    print('')
-    print('Total shear flow through all sections is')
-    print(total_shearflows)
-    print("rotation is {}".format(rotation / (28e9)))
+    #print("base shear flows \n")
+    #print ("base shear flow section 1 is")
+    #print(base_shear_flow1)
+    #print ("base shear flow section 2 is")
+    #print(base_shear_flow2)
+    #print('')
+    #print("variable shear flows \n")
+    #print ("variable shear flow in all sections is")
+    #for i in mat_ordered[:,3]: print(i)
+    #print('')
+    #print('Total shear flow through all sections is')
+    #print(total_shearflows)
+    #print("rotation is {}".format(rotation / (28e9)))
     
 def split_booms(booms):
     """Given booms which is an array contained of sperate booms as a class instance, split the booms up in
@@ -88,11 +90,16 @@ def calc_Vshear_flows(booms, F, xsec):
     coef1 = -1 * (Fz * Izz) / (Izz * Iyy)
     coef2 = -1 * (Fy * Iyy) / (Izz * Iyy)
     prev_shear_flow = 0 #as caclulations start at cut, initial shearflow is 0
-    for i in range(len(shear_flows)):
-        shear_flows[i] = prev_shear_flow + coef1 * (booms[i].get_size() * booms[i].get_position()[2]) + \
-            coef2 * (booms[i].get_size() * booms[i].get_position()[1])
-        prev_shear_flow = shear_flows[i]
-    #print(shear_flows)
+    
+    for i in range(len(booms)):
+        print(prev_shear_flow)
+        shear_flow = coef1 * booms[i].get_size() * booms[i].get_position()[2] + \
+            coef2 * booms[i].get_size() * booms[i].get_position()[1] + prev_shear_flow
+        prev_shear_flow = shear_flow
+        shear_flows[i] = shear_flow
+    print(prev_shear_flow)
+    print(shear_flows)
+    print('')
     return shear_flows
                                   
 def det_base_shearflow(mat, force):
@@ -130,9 +137,12 @@ def det_base_shearflow(mat, force):
     A1 = 0
     for i in range(np.shape(mat)[0] - 1):
         r = mat[i][0].det_distance(mat[-1][0]) #vector from boom 4 to boom i
-        #print(np.cross(r, force.get_force()))
-        A1 += np.cross(r, force.get_force())[0]
-    
+        rV = mat[i][1].get_position() - mat[i][0].get_position() #vector of the direction of the shearflow from the start boom to the end boom
+        qF = mat[i][3] * mat[i][2] * (rV / np.linalg.norm(rV))
+        #print(r)
+        #print(qF)
+        #print(np.cross(r, qF))
+        A1 += np.cross(r, qF)[0]
     #add in the moments from the forces acting on the section
     A1 += np.cross(force.get_position() - mat[-1][0].get_position(), force.get_force())[0]
 
