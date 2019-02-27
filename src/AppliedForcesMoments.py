@@ -106,12 +106,12 @@ def moment_functions(x_vals, forces):
 
     def Mz(x):
 
-        return +forces['q'][1]*(x**2)/2 \
-               -forces['R1'][1]*reLu(x,x_vals['x1'])\
-               -forces['Pi'][1]*reLu(x,(x_vals['x2']-x_vals['xa']/2))\
-               -forces['R2'][1]*reLu(x, x_vals['x2'])\
-               +forces['Pii'][1]*reLu(x, (x_vals['x2']+x_vals['xa']/2))\
-               -forces['R3'][1]*reLu(x,x_vals['x3'])
+        return -forces['q'][1]*(x**2)/2 \
+               +forces['R1'][1]*reLu(x,x_vals['x1'])\
+               +forces['Pi'][1]*reLu(x,(x_vals['x2']-x_vals['xa']/2))\
+               +forces['R2'][1]*reLu(x, x_vals['x2'])\
+               -forces['Pii'][1]*reLu(x, (x_vals['x2']+x_vals['xa']/2))\
+               +forces['R3'][1]*reLu(x,x_vals['x3'])
 
     return Mx, My, Mz
 
@@ -211,12 +211,12 @@ def plot_displacements(N, x_vals, forces):
 
     xrange = np.linspace(0, 2.661, N)
 
-    for idx, Mi in enumerate(moment_functions(x_vals, forces)):
-        F = double_integrate(Mi, 0, 2.661)
-        displacement_functions.append(double_integrate(Mi, 0, 2.661))
-
-        for xi in xrange:
-            displacements[idx].append(F(xi))
+    # for idx, Mi in enumerate(moment_functions(x_vals, forces)):
+    #     F = double_integrate(Mi, 0, 2.661)
+    #     displacement_functions.append(double_integrate(Mi, 0, 2.661))
+    #
+    #     for xi in xrange:
+    #         displacements[idx].append(F(xi))
 
 
     fig = plt.figure()
@@ -241,9 +241,9 @@ def plot_displacements(N, x_vals, forces):
     plt.show()
 
 
-# plot_shear(1000, distance_dict, force_dict)
-# plot_moments(1000, distance_dict, force_dict)
-plot_displacements(1000, distance_dict, force_dict)
+plot_shear(1000, distance_dict, force_dict)
+plot_moments(1000, distance_dict, force_dict)
+# plot_displacements(1000, distance_dict, force_dict)
 
 if __name__ == "__main__":
 
