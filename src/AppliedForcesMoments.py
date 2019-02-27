@@ -203,41 +203,11 @@ def plot_moments(N, x_vals, forces):
     plt.show()
 
 
-def plot_displacements(N, x_vals, forces):
-
-    displacement_functions = []
-    displacements = [[], [], []]
-
-    xrange = np.linspace(0, 2.661, N)
-
-    for idx, Fd in enumerate(displacement_functions):
-        pass
-
-    # fig = plt.figure()
-    #
-    # ax1 = plt.subplot(311)
-    # plt.plot(xrange, displacements[0])
-    # plt.title('Displacement in X')
-    # plt.ylabel('Displacement [m]')
-    # plt.grid()
-    #
-    # ax2 = plt.subplot(312, sharex=ax1)
-    # plt.plot(xrange, displacements[1])
-    # plt.title('Displacement in Y')
-    # plt.ylabel('Displacement [m]')
-    # plt.grid()
-    #
-    # ax3 = plt.subplot(313, sharex=ax1)
-    # plt.plot(xrange, displacements[2])
-    # plt.title('Displacement in Z')
-    # plt.ylabel('Displacement [m]')
-    # plt.grid()
-    # plt.show()
 
 
-# plot_shear(1000, distance_dict, force_dict)
-# plot_moments(1000, distance_dict, force_dict)
-plot_displacements(1000, distance_dict, force_dict)
+plot_shear(1000, distance_dict, force_dict)
+plot_moments(1000, distance_dict, force_dict)
+# plot_displacements(1000, distance_dict, force_dict)
 
 if __name__ == "__main__":
 
