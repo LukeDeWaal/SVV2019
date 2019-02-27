@@ -71,9 +71,10 @@ class Boom(object):
         Useful for when changing the axis origin"""
         self.__pos += delta_positions
 
+
 class StraightSkin(object):
 
-    def __init__(self, thickness: float = 0.001, startpos: np.array = np.array([0, 0, 0]), endpos: np.array = np.array([0, 0, 0]), density: float = 0.0):
+    def __init__(self, thickness: float = 0.0011, startpos: np.array = np.array([0, 0, 0]), endpos: np.array = np.array([0, 0, 0]), density: float = 0.0):
         """
         Create a skin object (to connect booms)
         :param mass: Mass of skin
@@ -95,6 +96,12 @@ class StraightSkin(object):
 
     def set_density(self, density):
         self.__density = density
+
+    def get_area(self):
+        return self.__t * self.get_length()
+
+    def get_center(self):
+        return (self.get_position('end')-self.get_position('start'))*0.5+self.get_position('start')
 
     def get_mass(self):
         return self.__t*np.linalg.norm(self.__start - self.__end)*self.__density
@@ -170,8 +177,6 @@ if __name__ == "__main__":
             self.assertAlmostEqual(boom_mass, self.boom.get_size()*self.boom.get_density())
             self.assertAlmostEqual(skin_mass, self.s_skin.get_thickness()*self.s_skin.get_length()*self.s_skin.get_density())
 
-
-
         def test_position_setter_getter_methods(self):
 
             #Initialized positions should be [0,0,0]
@@ -212,7 +217,7 @@ if __name__ == "__main__":
             s_skin_thickness = self.s_skin.get_thickness()
 
             self.assertEqual(1.0, boom_size)
-            self.assertEqual(0.001, s_skin_thickness)
+            self.assertEqual(0.0011, s_skin_thickness)
 
             #Set new masses
             new_thicknesses = [110, -3, 233]
