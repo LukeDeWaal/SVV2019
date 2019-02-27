@@ -18,15 +18,13 @@ def main():
  
     #Gets the booms
     booms = xsec.get_all_booms() #Booms is a list with each instance of the boom class as an entry
-    #for boom in booms: print(boom.get_position())
-    #print('')
+    
     #change the positions of the booms to the centroid axis frame
     x_centroid, y_centroid, z_centroid = xsec.get_centroid()
     for boom in booms: boom.update_position(np.array([0, 0, -1*z_centroid]))
-    #for boom in booms: print(boom.get_position()) 
+    
     #split the booms up into sec 1 and sec 2
     boom_sec1, boom_sec2 = split_booms(booms)
-    #print(boom_sec1[0].get_size())
     
     ##########create the force acting on the cross section##########
     
@@ -98,16 +96,12 @@ def calc_Vshear_flows(booms, F, xsec):
     prev_shear_flow = 0 #as caclulations start at cut, initial shearflow is 0
     
     for i in range(len(booms)):
-        #print(prev_shear_flow)
+        
         shear_flow = coef1 * booms[i].get_size() * booms[i].get_position()[2] + \
             coef2 * booms[i].get_size() * booms[i].get_position()[1] + prev_shear_flow
-        print(booms[i].get_position())
+       
         prev_shear_flow = shear_flow
         shear_flows[i] = shear_flow
-        
-    #print(prev_shear_flow)
-    #print(shear_flows)
-    print('')
     return shear_flows
                                   
 def det_base_shearflow(mat, force):
