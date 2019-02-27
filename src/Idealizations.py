@@ -59,9 +59,14 @@ class Boom(object):
         self.__pos = position
     
     def det_distance(self, boom2):
-        """Determines the distance from 1 boom to another boom, x,y and z directions
+        """Determines the vector going from boom 2 TOO SELF in x,y and z directions
         and returns it as a vector"""
-        return np.sqrt((self.get_position()- boom2.get_position()) ** 2)
+        return (self.get_position()- boom2.get_position())
+    
+    def update_position(self, delta_positions):
+        """Given delta positions, the position of the boom is updated.
+        Useful for when changing the axis origin"""
+        self.__pos += delta_positions
 
 
 class StraightSkin(object):
