@@ -60,8 +60,9 @@ def get_crossectional_coordinates(c, h, hs) -> np.array:
     angle = np.arctan((h/2)/(c-h/2))    # Stiffener angle with vertical
     max_height_diff = hs*np.cos(angle)  # Vertical height of stiffener
 
-    max_x_1 = newtons_method(lambda x: upper_slope(x)-max_height_diff, c)
-    max_x_2 = newtons_method(lambda x: lower_slope(x)+max_height_diff, c)
+    max_x_1 = newtons_method(lambda x: upper_slope(x)-max_height_diff, c) # Maximum z coordinate to not conflict with other stiffeners for bottom skin
+    max_x_2 = newtons_method(lambda x: lower_slope(x)+max_height_diff, c) # Maximum z coordinate to not conflict with other stiffeners for top skin
+
     if round(max_x_1, 8) == round(max_x_2, 8):
         pass
     else:
@@ -91,7 +92,7 @@ def plot_crosssection(positions) -> None:
 
 class CrossSection:
 
-    def __init__(self, boom_coordinates, sparcap_coordinates=np.array([[ha/2, ha/2],[-ha/2, ha/2]]), x_coordinate=0, initial_areas=True):
+    def __init__(self, boom_coordinates, sparcap_coordinates=np.array([[ha/2, ha/2],[-ha/2, ha/2]]), x_coordinate=0, initial_areas=True, transform=True):
 
         # Pointer
         self.__cur = 0
@@ -101,8 +102,12 @@ class CrossSection:
         self.__x_vector = np.ones((len(boom_coordinates[:, 0]), 1)) * self.__x
 
         # Boom Coordinates
-        self.__stiffener_coordinates = np.concatenate((self.__x_vector, boom_coordinates), axis=1)
-        self.__sparcap_coordinates   = np.concatenate((np.ones((2, 1)) * self.__x, sparcap_coordinates), axis=1) if sparcap_coordinates is not False else None
+        if transform is True:
+            self.__stiffener_coordinates = np.concatenate([coordinate_transformation(point) for point in np.concatenate((self.__x_vector, boom_coordinates), axis=1)], axis=0)
+            self.__sparcap_coordinates   = np.concatenate([coordinate_transformation(point) for point in np.concatenate((np.ones((2, 1)) * self.__x, sparcap_coordinates), axis=1)], axis=0) if sparcap_coordinates is not False else None
+        else:
+            self.__stiffener_coordinates = np.concatenate((self.__x_vector, boom_coordinates), axis=1)
+            self.__sparcap_coordinates = np.concatenate((np.ones((2, 1)) * self.__x, sparcap_coordinates), axis=1) if sparcap_coordinates is not False else None
 
         # Creating all Boom Objects
         self.__initial_areas = initial_areas
@@ -300,17 +305,14 @@ class CrossSection:
         else:
             return -1
 
-        for boom in self.get_all_booms():
-            MOI += boom.get_size() * (boom.get_position()[idx1] * boom.get_position()[idx2])
+        MOI = self.area_MOI(axes=axes)
 
         for skin in self.get_skin_objects():
 
             angle = self.angle_between(np.array([0, 0, 1]), skin.get_position('end') - skin.get_position('start'))
             angularterms = [0, np.sin(angle), np.cos(angle)]
 
-            #TODO: Check Steiner term for skins
             MOI += 1.0 / 12.0 * skin.get_thickness() * (skin.get_length() ** 3) * (angularterms[idx1]*angularterms[idx2]) + skin.get_area()*(skin.get_center()[idx1]*skin.get_center()[idx2])
-            print(1.0 / 12.0 * skin.get_thickness() * (skin.get_length() ** 3) * (angularterms[idx1]*angularterms[idx2]) + skin.get_area()*(skin.get_center()[idx1]*skin.get_center()[idx2]))
 
         return MOI
 
@@ -391,16 +393,17 @@ class CrossSection:
 
 class FullModel(object):
 
-    def __init__(self, coordinates, xrange, N, sparcaps: bool or np.array = np.array([[ha/2, ha/2],[-ha/2, ha/2]]), initial_areas=True):
+    def __init__(self, coordinates, xrange, N, sparcaps: bool or np.array = np.array([[ha/2, ha/2],[-ha/2, ha/2]]), initial_areas=True, transform=True):
 
         self.__sections = [None]*N
         self.__initial_areas = initial_areas
+        self.__transform = transform
         self.__cur = 0
         self.__boomcoordinates = coordinates
         self.__xrange = xrange
         self.__N = N
 
-        self.__assemble_structure(sparcaps)
+        self.__assemble_structure(sparcaps, transform=self.__transform)
 
     def __len__(self):
         return self.__N
@@ -430,17 +433,13 @@ class FullModel(object):
             self.__cur += 1
             return result
 
-    def transform_coordinates(self):
-
-        coordinates = [coordinate_transformation(p) for p in self.get_all_boom_coordinates()]
-
     def get_N_sections(self):
         """
         :return: Amount of crosssections in model
         """
         return self.__N
 
-    def __assemble_structure(self, sparcaps):
+    def __assemble_structure(self, sparcaps, transform):
         """
         :param sparcaps: Boolean or Array
         :return: None
@@ -449,7 +448,8 @@ class FullModel(object):
             self.__sections[idx] = CrossSection(self.__boomcoordinates,
                                                 sparcap_coordinates=sparcaps,
                                                 x_coordinate=xi,
-                                                initial_areas=self.__initial_areas)
+                                                initial_areas=self.__initial_areas,
+                                                transform=transform)
 
     def get_all_boom_coordinates(self):
 
@@ -525,7 +525,7 @@ class FullModel(object):
 if __name__ == "__main__":
 
     coordinates = get_crossectional_coordinates(Ca, ha, h_stringer)
-    crosssection = CrossSection(coordinates, )
+    crosssection = CrossSection(coordinates)
 
     class StructureTestCases(unittest.TestCase):
 
@@ -537,17 +537,17 @@ if __name__ == "__main__":
 
             self.coordinates = get_crossectional_coordinates(self.Ca, self.ha, self.h_stringer)
 
-            self.crosssection = CrossSection(self.coordinates)
-            self.model = FullModel(self.coordinates, (0, ba), 25)
+            self.crosssection = CrossSection(self.coordinates, transform=False)
+            self.model = FullModel(self.coordinates, (0, ba), 25, transform=True)
 
             self.sqcoordinates = np.array([[-0.5, -0.5], [0.5, -0.5], [0.5, 0.5], [-0.5, 0.5]])
-            self.sqmodel = FullModel(self.sqcoordinates, (-0.5, 0.5), 3, sparcaps=False, initial_areas=False)
+            self.sqmodel = FullModel(self.sqcoordinates, (-0.5, 0.5), 3, sparcaps=False, initial_areas=False, transform=False)
 
             self.beamcoordinates = np.array([[-2, -1],[2, -1], [2, 1], [-2, 1]])
-            self.beammodel = FullModel(self.beamcoordinates, (-1, 1), 3, sparcaps=False, initial_areas=False)
+            self.beammodel = FullModel(self.beamcoordinates, (-1, 1), 3, sparcaps=False, initial_areas=False, transform=False)
 
             self.logcoordinates = np.concatenate((np.log((1 + np.random.randint(np.pi, 2 * np.pi) * np.arange(0, 1, 0.1)).reshape(10, 1)), np.arange(0, 1, 0.1).reshape(10, 1)), axis=1)
-            self.logmodel = FullModel(self.logcoordinates, (-1, 1), 5, sparcaps=False, initial_areas=False)
+            self.logmodel = FullModel(self.logcoordinates, (-1, 1), 5, sparcaps=False, initial_areas=False, transform=False)
 
 
         def test_plots(self):
@@ -651,7 +651,7 @@ if __name__ == "__main__":
 
             for i in range(len(self.coordinates)):
                 for j in range(len(self.coordinates[i])):
-                    self.assertAlmostEqual(self.coordinates[i][j], cs_coordinates[i][j+1])
+                    self.assertAlmostEqual(self.coordinates[i][j], cs_coordinates[i, j+1])
 
     def run_TestCases():
         suite = unittest.TestLoader().loadTestsFromTestCase(StructureTestCases)

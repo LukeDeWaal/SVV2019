@@ -1,7 +1,6 @@
 """
 Main Script
 """
-
 from src.ForceMomentObjects import Force, Moment, DistributedLoad
 from src.AppliedForcesMoments import ForceMomentSystem
 from src.Structure import FullModel, get_crossectional_coordinates

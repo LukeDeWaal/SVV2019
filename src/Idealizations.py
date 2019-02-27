@@ -66,6 +66,7 @@ class Boom(object):
         and returns it as a vector"""
         return np.sqrt((self.get_position()- boom2.get_position()) ** 2)
 
+
 class StraightSkin(object):
 
     def __init__(self, thickness: float = 0.0011, startpos: np.array = np.array([0, 0, 0]), endpos: np.array = np.array([0, 0, 0]), density: float = 0.0):
@@ -95,7 +96,7 @@ class StraightSkin(object):
         return self.__t * self.get_length()
 
     def get_center(self):
-        return (self.get_position('end')-self.get_position('start'))*0.5*self.get_length()+self.get_position('start')
+        return (self.get_position('end')-self.get_position('start'))*0.5+self.get_position('start')
 
     def get_mass(self):
         return self.__t*np.linalg.norm(self.__start - self.__end)*self.__density
@@ -171,8 +172,6 @@ if __name__ == "__main__":
             self.assertAlmostEqual(boom_mass, self.boom.get_size()*self.boom.get_density())
             self.assertAlmostEqual(skin_mass, self.s_skin.get_thickness()*self.s_skin.get_length()*self.s_skin.get_density())
 
-
-
         def test_position_setter_getter_methods(self):
 
             #Initialized positions should be [0,0,0]
@@ -213,7 +212,7 @@ if __name__ == "__main__":
             s_skin_thickness = self.s_skin.get_thickness()
 
             self.assertEqual(1.0, boom_size)
-            self.assertEqual(0.001, s_skin_thickness)
+            self.assertEqual(0.0011, s_skin_thickness)
 
             #Set new masses
             new_thicknesses = [110, -3, 233]
