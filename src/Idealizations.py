@@ -57,9 +57,6 @@ class Boom(object):
 
     def set_position(self, position):
         self.__pos = position
-
-    def area_MOI(self, axis1, axis2=None):
-        pass
     
     def det_distance(self, boom2):
         """Determines the distance from 1 boom to another boom, x,y and z directions
@@ -236,7 +233,7 @@ if __name__ == "__main__":
 
             self.assertEqual(expected_length, straight_len)
 
-            #Setting New Lengths and Radius
+            #Setting New Lengths
 
             self.s_skin.set_position(np.array([1,1,1]), which='end')
 
@@ -244,6 +241,25 @@ if __name__ == "__main__":
 
             self.assertAlmostEqual(new_l, np.linalg.norm([1,1,1]))
 
+        def test_density_getter_setter_methods(self):
+
+            self.assertEqual(self.boom.get_density(), 0.0)
+            self.assertEqual(self.s_skin.get_density(), 0.0)
+
+            self.boom.set_density(2780.0)
+            self.s_skin.set_density(2780.0)
+
+            self.assertEqual(self.boom.get_density(), 2780.0)
+            self.assertEqual(self.s_skin.get_density(), 2780.0)
+
+        def test_type(self):
+
+            self.assertEqual(self.boom.get_type(), 'Stiffener')
+            
+            sparcap = Boom()
+            sparcap.set_type('Sparcap')
+
+            self.assertEqual(sparcap.get_type(), 'Sparcap')
 
     def run_TestCases():
         suite = unittest.TestLoader().loadTestsFromTestCase(IdealizationTestCases)

@@ -210,34 +210,29 @@ def plot_displacements(N, x_vals, forces):
 
     xrange = np.linspace(0, 2.661, N)
 
-    for idx, Mi in enumerate(moment_functions(x_vals, forces)):
-        F = double_integrate(Mi, 0, 2.661)
-        displacement_functions.append(double_integrate(Mi, 0, 2.661))
+    for idx, Fd in enumerate(displacement_functions):
+        pass
 
-        for xi in xrange:
-            displacements[idx].append(F(xi))
-
-
-    fig = plt.figure()
-
-    ax1 = plt.subplot(311)
-    plt.plot(xrange, displacements[0])
-    plt.title('Displacement in X')
-    plt.ylabel('Displacement [m]')
-    plt.grid()
-
-    ax2 = plt.subplot(312, sharex=ax1)
-    plt.plot(xrange, displacements[1])
-    plt.title('Displacement in Y')
-    plt.ylabel('Displacement [m]')
-    plt.grid()
-
-    ax3 = plt.subplot(313, sharex=ax1)
-    plt.plot(xrange, displacements[2])
-    plt.title('Displacement in Z')
-    plt.ylabel('Displacement [m]')
-    plt.grid()
-    plt.show()
+    # fig = plt.figure()
+    #
+    # ax1 = plt.subplot(311)
+    # plt.plot(xrange, displacements[0])
+    # plt.title('Displacement in X')
+    # plt.ylabel('Displacement [m]')
+    # plt.grid()
+    #
+    # ax2 = plt.subplot(312, sharex=ax1)
+    # plt.plot(xrange, displacements[1])
+    # plt.title('Displacement in Y')
+    # plt.ylabel('Displacement [m]')
+    # plt.grid()
+    #
+    # ax3 = plt.subplot(313, sharex=ax1)
+    # plt.plot(xrange, displacements[2])
+    # plt.title('Displacement in Z')
+    # plt.ylabel('Displacement [m]')
+    # plt.grid()
+    # plt.show()
 
 
 # plot_shear(1000, distance_dict, force_dict)

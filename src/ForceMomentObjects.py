@@ -56,7 +56,7 @@ class DistributedLoad(object):
         self.__end = np.array(endpos) if type(endpos) != np.array else endpos
         self.__N = N
 
-        self.__discretized_forces = None
+        self.__discretized_forces = self.discretize()
 
     def discretize(self):
         forces = []

@@ -538,7 +538,8 @@ if __name__ == "__main__":
             self.coordinates = get_crossectional_coordinates(self.Ca, self.ha, self.h_stringer)
 
             self.crosssection = CrossSection(self.coordinates, transform=False)
-            self.model = FullModel(self.coordinates, (0, ba), 25, transform=True)
+            self.transformed_model = FullModel(self.coordinates, (0, ba), 25, transform=True)
+            self.normal_model = FullModel(self.coordinates, (0, ba), 25, transform=True)
 
             self.sqcoordinates = np.array([[-0.5, -0.5], [0.5, -0.5], [0.5, 0.5], [-0.5, 0.5]])
             self.sqmodel = FullModel(self.sqcoordinates, (-0.5, 0.5), 3, sparcaps=False, initial_areas=False, transform=False)
@@ -552,7 +553,7 @@ if __name__ == "__main__":
 
         def test_plots(self):
 
-            for model in [self.model, self.sqmodel, self.beammodel, self.logmodel]:
+            for model in [self.transformed_model, self.sqmodel, self.beammodel, self.logmodel]:
                 fig = plt.figure()
                 ax = Axes3D(fig)
                 model.plot_structure(ax)
@@ -618,7 +619,12 @@ if __name__ == "__main__":
 
         def test_real_MOI(self):
 
-            print(self.crosssection.real_MOI('zz'))
+            self.assertGreater(self.crosssection.real_MOI('zz'), self.crosssection.area_MOI('zz'))
+
+            for section in self.normal_model:
+
+                self.assertGreater(section.real_MOI('zz'), section.area_MOI('zz'))
+                self.assertGreater(section.real_MOI('yy'), section.area_MOI('yy'))
 
         def test_boom_update(self):
 
