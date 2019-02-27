@@ -14,7 +14,7 @@ from mpl_toolkits.mplot3d import Axes3D
 import unittest
 import numpy as np
 
-from NumericalTools import newtons_method, derive, pythagoras
+from NumericalTools import newtons_method, derive, pythagoras, coordinate_transformation
 
 #from src.NumericalTools import newtons_method, coordinate_transformation
 
