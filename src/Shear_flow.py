@@ -5,16 +5,26 @@ already been idealized as booms"""
 import Structure as scr 
 import numpy as np
 from ForceMomentObjects import *
+import AppliedForcesMoments as AFM
 
+def shear_flow(x_position, test=0):
+    """This function is what is called to give shear flows as an output. It takes in the x postion of the 
+    cross section and then uses the forces which are found in the shearflow calculations"""
+    
+    force_y, force_z = AFM.shear_functions(x_position, AFM.force_dict)
+    moment_x, moment_y, moment_z = AFM.moment_functions(x_position, AFM.force_dict, test)
+    
+    return main(x_position, force_y, force_z, moment_x)
+    
 
-def main():
+def main(x_position, force_y, force_z, moment_x, testing=0):
     """Initlizes and runs program
     returns the shear flow between booms as an array"""
     
     #Initilises the other moduals and classes
     globs = scr.get_globals()
     boom_cords = scr.get_crossectional_coordinates(globs[1], globs[0], globs[-1])
-    xsec = scr.CrossSection(boom_cords)
+    xsec = scr.CrossSection(boom_cords, x_coordinate=x_position)
  
     #Gets the booms
     booms = xsec.get_all_booms() #Booms is a list with each instance of the boom class as an entry
@@ -26,19 +36,10 @@ def main():
     #split the booms up into sec 1 and sec 2
     boom_sec1, boom_sec2 = split_booms(booms)
     
-    ##########create the force acting on the cross section##########
-    
-    """For test cases:
-    1 = forces are 100N in both directions
-    2 = 100N in positive y direction
-    3 = 100N in positive z direction
-    4 = 94kN in positive y direction"""
-    force_y, force_z = test_cases(3) #y is up, z is towards TE
-    
-    ########################
-    
+    #forces acting on the cross section. Are given as input params to main()
     force_spar = Force(np.array([0, force_y, force_z]), np.array([boom_sec1[0].get_position()[0], 0, boom_sec1[0].get_position()[2] + z_centroid]))
-    '''force acting at middle of the spar'''
+    moment_x = moment_x
+    """force acting at middle of the spar"""
     
     #calculate the open shear flow in both sections - make independant of boom number
     Vshear_flows1 = calc_Vshear_flows(boom_sec1, force_spar, xsec)
@@ -46,24 +47,30 @@ def main():
     
     #determine eq for q0s in both sections in sec 1 and sec 2 using sum of moments a the lowest spar boom
     mat_ordered = order_booms(Vshear_flows1, Vshear_flows2, boom_sec1, boom_sec2, xsec) #orderes the matrix nicer
-    base_shear_flow1, base_shear_flow2, rotation  = det_base_shearflow(mat_ordered, force_spar)
+    base_shear_flow1, base_shear_flow2, rotation  = det_base_shearflow(mat_ordered, force_spar, moment_x)
 
     total_shearflows = combined_shearflow(base_shear_flow1, base_shear_flow2, mat_ordered)
-
+    
+    if testing == 0: return total_shear_flows
+    elif testing == 1:
     ############print stuff#############
-    #print("base shear flows \n")
-    #print ("base shear flow section 1 is")
-    #print(base_shear_flow1)
-    #print ("base shear flow section 2 is")
-    #print(base_shear_flow2)
-    #print('')
-    #print("variable shear flows \n")
-    #print ("variable shear flow in all sections is")
-    #for i in mat_ordered[:,3]: print(i)
-    #print('')
-    #print('Total shear flow through all sections is')
-    #print(total_shearflows)
-    #print("rotation is {}".format(rotation / (28e9)))
+        print("Info for testing. The shear flow is defined as positive for anticlockwise flow \n")
+        print ('')
+        print ("Base shear flows: \n")
+        print ("Base shear flow in section 1 is {:.3f} N/m".format(base_shear_flow1))
+        print ("Base shear flow in section 2 is {:.3f} N/m".format(base_shear_flow2))
+        print ('')
+        print ("Variable shear flows: \n")
+        for row in  mat_ordered:
+            print ("Variable shear flow between boom{} and boom{} is {:.3f} N/m"\
+                   .format(row[0].get_label(), row[1].get_label(), row[3]))
+        print ('')
+        print ('Total shear flow through all sections is:')
+        for i in  mat_ordered[:,0]:
+            print ("Total shear flow between boom{} and boom{} is {:.3f} N/m"\
+                   .format(mat_ordered[i][0].get_label(), mat_ordered[i][1].get_label(), total_shearflows[i]))
+        print('')
+        print("#" * 60)
     
 def split_booms(booms):
     """Given booms which is an array contained of sperate booms as a class instance, split the booms up in
@@ -104,7 +111,7 @@ def calc_Vshear_flows(booms, F, xsec):
         shear_flows[i] = shear_flow
     return shear_flows
                                   
-def det_base_shearflow(mat, force):
+def det_base_shearflow(mat, force, moment=0):
     """given the variable shear flows in the cross section, the boom positions and the cross section properties
     the base shearfloes are determined in each section"""
     #determines the areas of sec1 and sec 2
@@ -146,7 +153,7 @@ def det_base_shearflow(mat, force):
         #print(np.cross(r, qF))
         A1 += np.cross(r, qF)[0]
     #add in the moments from the forces acting on the section
-    A1 += np.cross(force.get_position() - mat[-1][0].get_position(), force.get_force())[0]
+    A1 += np.cross(force.get_position() - mat[-1][0].get_position(), force.get_force())[0] + moment
 
     A_mat[0] = np.array([2 * mat[0][-1][0], 2 * mat[5][-1][1], 0]) #C1, C2, 0
     b[0] = A1 * -1 #b1
@@ -238,18 +245,38 @@ def combined_shearflow(base_shear_flow1, base_shear_flow2, mat):
             
 
 
-def test_cases(case):
+def test_cases(x_pos=None):
     """Runs test cases"""
-    if case == 1:
-        return 100, 100
-    elif case == 2:
-        return 100, 0
-    elif case == 3:
-        return 0, 100
-    elif case == 4:
-        return 94e3, 0
     
-#runs main()
-main()
+    if  x_pos == None:
+        print("Which test case do you want? \n \
+        All cases are taken at x=0 with no torque acting on the cross section \n")
+        print("This function also prints out: \n \
+        The variable shear flows between the booms \n \
+        The base shear flow in both sections \n \
+        The total shear flow between each boom \n")
+        print( "Cases:\n \
+        1 = forces are 100N in both directions \n \
+        2 = 100N in positive y direction \n \
+        3 = 100N in positive z direction \n \
+        4 = 94kN in positive y direction")
+        print("#" * 60)
+        case = input("Case: ")
+        if case == 1:
+            main(0, 100, 100, 0, 1)
+        elif case == 2:
+            main(0, 100, 0, 0, 1)
+        elif case == 3:
+            main(0, 0, 100, 0, 1)
+        elif case == 4:
+            main(0, 94e3, 0, 0, 1)
+    else: #This allows a test of output from an actual case
+        __ = shear_flow(x_pos, 1)
+    
+    input("\n Press any key to close")
+
+    
+###################
+test_cases(0)
     
 
