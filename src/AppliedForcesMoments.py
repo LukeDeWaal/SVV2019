@@ -76,9 +76,9 @@ distance_dict = {'x1': 0.172,
                  'Ca': 0.605
                 }
 
-force_dict = {'R1':  [0, 16.1018703e3, 7.386e3],
-              'R2':  [0, -31.653781e3, 0.28964e3],
-              'R3':  [0, 25.276613e3, -13.97463e3],
+force_dict = {'R1':  [0, -38535.63, 157924.99],
+              'R2':  [0, 64131.88, -241717.75],
+              'R3':  [0, -15871.55, 96904.39],
               'Pi':  [0, Pi*np.sin(distance_dict['theta']), Pi*np.cos(distance_dict['theta'])],
               'Pii': [0, Pii*np.sin(distance_dict['theta']), Pii*np.cos(distance_dict['theta'])],
               'q':   [0, q*np.cos(distance_dict['theta']), q*np.sin(distance_dict['theta'])]}
@@ -96,12 +96,12 @@ def moment_functions(x_vals, forces):
 
     def My(x):
 
-        return (- forces['q'][2]*(x**2)/2
+        return (+ forces['q'][2]*(x**2)/2
                 - forces['R1'][2]*reLu(x,x_vals['x1'])
-                - forces['Pi'][2]*reLu(x,(x_vals['x2']-x_vals['xa']/2))
+                + forces['Pi'][2]*reLu(x,(x_vals['x2']-x_vals['xa']/2))
                 - forces['R2'][2] * reLu(x, x_vals['x2'])
-                + forces['Pii'][2]*reLu(x, (x_vals['x2']+x_vals['xa']/2))
-                - forces['R3'][2]*reLu(x, x_vals['x3']))
+                - forces['Pii'][2]*reLu(x, (x_vals['x2']+x_vals['xa']/2))
+                - forces['R3'][2]*reLu(x, x_vals['x3']))*-1
 
     def Mz(x):
 
@@ -118,20 +118,20 @@ def moment_functions(x_vals, forces):
 def shear_functions(x_vals, forces):
 
     def Fy(x):
-        return - forces['q'][1]  * x \
+        return (- forces['q'][1]  * x \
                + forces['R1'][1] * step_function(x, x_vals['x1'])\
                + forces['R3'][1] * step_function(x, x_vals['x3'])\
                + forces['R2'][1] * step_function(x, x_vals['x2'])\
                + forces['Pi'][1] * step_function(x, x_vals['x2']-x_vals['xa']/2.0) \
-               - forces['Pii'][1]* step_function(x, x_vals['x2']+x_vals['xa']/2.0)
+               - forces['Pii'][1]* step_function(x, x_vals['x2']+x_vals['xa']/2.0))*-1
 
     def Fz(x):
-        return - forces['q'][2]  * x \
+        return (+ forces['q'][2]  * x \
                - forces['R1'][2] * step_function(x, x_vals['x1']) \
                - forces['R2'][2] * step_function(x, x_vals['x2']) \
                - forces['R3'][2] * step_function(x, x_vals['x3']) \
-               - forces['Pi'][2] * step_function(x, (x_vals['x2'] - x_vals['xa']/2)) \
-               + forces['Pii'][2]* step_function(x, (x_vals['x2'] + x_vals['xa']/2))
+               + forces['Pi'][2] * step_function(x, (x_vals['x2'] - x_vals['xa']/2)) \
+               - forces['Pii'][2]* step_function(x, (x_vals['x2'] + x_vals['xa']/2)))*-1
 
     return Fy, Fz
 
