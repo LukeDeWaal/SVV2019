@@ -44,7 +44,19 @@ class Force(object):
     def set_magnitude(self, magnitude):
         dirvec = self.get_direction()
         self.__force = magnitude*dirvec
-
+    
+    def __str__(self):
+        out = \
+        "Force in x: {} \n \
+        Force in y: {} \n \
+        Force in z: {} \n \
+        \n \
+        Acting point of the force is: \n \
+        x position: {} \n \
+        y position: {} \n \
+        z position: {}".format(self.__force[0], self.__force[1], self.__force[2], \
+                               self.__pos[0], self.__pos[1], self.__pos[2])
+        return out       
 
 class DistributedLoad(object):
 
