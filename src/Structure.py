@@ -3,20 +3,19 @@ Build the aileron structural idealization here (using skin, booms, etc)
 """
 
 
-from Idealizations import Boom, StraightSkin
-from Idealizations import *
-
-#from src.Idealizations import Boom, StraightSkin
-
-
+from src.Idealizations import Boom, StraightSkin
+import pylab as pl
 import matplotlib.pyplot as plt
+import matplotlib.cm as cm
+import matplotlib.colors as clr
 from mpl_toolkits.mplot3d import Axes3D
 import unittest
 import numpy as np
 
-from NumericalTools import newtons_method, derive, pythagoras, coordinate_transformation
 
-#from src.NumericalTools import newtons_method, coordinate_transformation
+#from NumericalTools import newtons_method, derive, pythagoras, coordinate_transformation
+
+from src.NumericalTools import newtons_method, derive, pythagoras, coordinate_transformation
 
 pi = np.pi
 
@@ -92,11 +91,11 @@ def get_crossectional_coordinates(c, h, hs) -> np.array:
 
 def plot_crosssection(positions) -> None:
     yp = []
-    plt.scatter(positions[:,1], positions[:,2])
+    plt.scatter(positions[:,1], positions[:,0])
     plt.axes().set_aspect('equal')
     plt.grid(True)
 
-#plot_crosssection(get_crossectional_coordinates(Ca, ha, h_stringer))
+# plot_crosssection(get_crossectional_coordinates(Ca, ha, h_stringer))
 
 
 class CrossSection:
@@ -183,7 +182,13 @@ class CrossSection:
         return line
 
     def __str__(self) -> str:
-        return f"# Booms: {self.get_N_booms()}, # Spar Caps: {self.get_N_spars()} \n"
+        return f"x: {self.__x}, # Booms: {self.get_N_booms()}, # Spar Caps: {self.get_N_spars()} \n"
+
+    def __eq__(self, other):
+        if (self.get_centroid() == other.get_centroid()).all() and self.get_x() == other.get_x():
+            return True
+        else:
+            return False
 
     def __len__(self) -> int:
         return self.get_N_objects()
@@ -224,6 +229,7 @@ class CrossSection:
         :param x: X Coordinate
         :return: None
         """
+        self.__x = x
         for boom in self.get_all_booms():
             old_position = boom.get_position()
             old_position[0] = x
@@ -234,7 +240,7 @@ class CrossSection:
         Check the x-value of the crosssection
         :return: x coordinate
         """
-        return self.get_stiffener_objects()[0].get_position()[0]
+        return self.__x
 
     def get_centroid(self) -> float or int:
         """
@@ -346,6 +352,8 @@ class CrossSection:
             else:
                 raise TypeError
 
+
+
     def get_mass(self) -> float or int:
         """
         Get total summed up mass of booms and skins
@@ -396,8 +404,7 @@ class CrossSection:
         """
         return self.__sparcap_coordinates
 
-    def calculate_shear_centre(self):
-        pass
+
 
 
 class FullModel(object):
@@ -421,6 +428,7 @@ class FullModel(object):
         string = ""
         for section in self.get_sections():
             string += str(section)
+        return string
 
     def __getitem__(self, index):
         return self.get_sections()[index]
@@ -442,13 +450,13 @@ class FullModel(object):
             self.__cur += 1
             return result
 
-    def get_N_sections(self):
+    def get_N_sections(self) -> int:
         """
         :return: Amount of crosssections in model
         """
         return self.__N
 
-    def __assemble_structure(self, sparcaps, transform):
+    def __assemble_structure(self, sparcaps, transform) -> None:
         """
         :param sparcaps: Boolean or Array
         :return: None
@@ -460,13 +468,13 @@ class FullModel(object):
                                                 initial_areas=self.__initial_areas,
                                                 transform=transform)
 
-    def get_all_boom_coordinates(self):
-
+    def get_all_boom_coordinates(self) -> np.array:
+        """
+        :return: Array with all 3D coordinates
+        """
         coordinates = tuple([section.get_all_coordinates() for section in self.get_sections()])
         return np.concatenate(coordinates, axis=0)
 
-    def calculate_reaction_forces(self):
-        pass
 
     @staticmethod
     def __parametrize_line(v1: np.array, v2: np.array):
@@ -474,7 +482,12 @@ class FullModel(object):
             return v1 + (v2-v1)*t
         return line
 
-    def plot_structure(self, ax):
+    def plot_structure(self, fig, ax, scaled_sizes=False) -> None:
+        """
+        Plot the 3D Structure
+        :param ax: Plotting Axes
+        :return: None
+        """
 
         # Boom Coordinates
         coordinates = self.get_all_boom_coordinates()
@@ -482,12 +495,11 @@ class FullModel(object):
         yboomplot = coordinates[:, 1]
         zboomplot = coordinates[:, 2]
 
-        ax.set_xlim3d(-2, 2)
-        ax.set_ylim3d(-0.1, 0.6)
-        ax.set_zlim3d(-0.3, 0.3)
+        ax.set_xlim3d(self.__xrange[0], self.__xrange[1])
+        ax.set_ylim3d(-0.3, 0.3)
+        ax.set_zlim3d(0.0, 0.6)
 
         # Lines around crosssection
-        #TODO: Fix Lines between booms
         xlineplot_1 = [[] for _ in range(self.__N)]
         ylineplot_1 = [[] for _ in range(self.__N)]
         zlineplot_1 = [[] for _ in range(self.__N)]
@@ -516,18 +528,45 @@ class FullModel(object):
                 ylineplot_2[idx].append(position[1])
                 zlineplot_2[idx].append(position[2])
 
-        ax.scatter3D(xboomplot, zboomplot, yboomplot, s=40, c='k')
+        if scaled_sizes is True:
+            sizes = []
+            for section in self.get_sections():
+                for boom in section:
+                    sizes.append(boom.get_size())
+
+            sizes = np.array(sizes)
+            #sizes = (sizes - np.min(sizes))/(np.max(sizes) - np.min(sizes))*100.0
+
+            cs = sizes
+            colorsMap = 'viridis'
+            cmx = plt.get_cmap(colorsMap)
+            cNorm = clr.Normalize(vmin=min(cs), vmax=max(cs))
+            scalarMap = cm.ScalarMappable(norm=cNorm, cmap=cmx)
+
+            ax.scatter3D(xboomplot, yboomplot, zboomplot, s=40, c=scalarMap.to_rgba(cs))
+            scalarMap.set_array(cs)
+            fig.colorbar(scalarMap, label='Boom Size')
+
+        else:
+            sizes = 40
+
+            ax.scatter3D(xboomplot, yboomplot, zboomplot, s=sizes)
+
+        wire_colour = '0.5'
 
         for i in range(self.__N):
-            ax.plot(xlineplot_1[i], zlineplot_1[i], ylineplot_1[i], 'k')
+            ax.plot(xlineplot_1[i], ylineplot_1[i], zlineplot_1[i], wire_colour)
 
         for i in range(17):
-            ax.plot(xlineplot_2[i], zlineplot_2[i], ylineplot_2[i], 'k')
+            ax.plot(xlineplot_2[i], ylineplot_2[i], zlineplot_2[i], wire_colour)
 
-    def get_mass(self):
+    def get_discr_mass(self) -> float:
         return sum([section.get_mass() for section in self.get_sections()])
 
-    def get_sections(self):
+    def get_intgr_mass(self) -> float:
+        return self.get_sections()[0].get_mass()*(self.__xrange[1] - self.__xrange[0])
+
+    def get_sections(self) -> list:
         return self.__sections
 
 
@@ -546,8 +585,11 @@ if __name__ == "__main__":
 
             self.coordinates = get_crossectional_coordinates(self.Ca, self.ha, self.h_stringer)
 
+            self.N = 25
+
             self.crosssection = CrossSection(self.coordinates, transform=False)
-            self.model = FullModel(self.coordinates, (0, ba), 25, transform=True)
+            self.transformed_model = FullModel(self.coordinates, (0, ba), self.N, transform=True)
+            self.normal_model = FullModel(self.coordinates, (0, ba), self.N, transform=False)
 
             self.sqcoordinates = np.array([[-0.5, -0.5], [0.5, -0.5], [0.5, 0.5], [-0.5, 0.5]])
             self.sqmodel = FullModel(self.sqcoordinates, (-0.5, 0.5), 3, sparcaps=False, initial_areas=False, transform=False)
@@ -558,13 +600,55 @@ if __name__ == "__main__":
             self.logcoordinates = np.concatenate((np.log((1 + np.random.randint(np.pi, 2 * np.pi) * np.arange(0, 1, 0.1)).reshape(10, 1)), np.arange(0, 1, 0.1).reshape(10, 1)), axis=1)
             self.logmodel = FullModel(self.logcoordinates, (-1, 1), 5, sparcaps=False, initial_areas=False, transform=False)
 
+        def test_standard_python_method_implementations(self):
+
+            # __len__
+            self.assertEqual(len(self.crosssection), 17)
+            self.assertEqual(len(self.normal_model), self.N)
+            self.assertEqual(len(self.normal_model), len(self.transformed_model))
+
+            # __iter__ and __next__
+            i = 0
+            for boom in self.crosssection:
+                self.assertEqual(type(boom), type(Boom()))
+                self.assertLessEqual(i, len(self.crosssection))
+                i += 1
+
+            i = 0
+            for n_section, t_section in zip(self.normal_model, self.transformed_model):
+                self.assertEqual(type(n_section), type(CrossSection(self.coordinates)))
+                self.assertEqual(type(t_section), type(CrossSection(self.coordinates)))
+                self.assertLessEqual(i, len(self.normal_model))
+                self.assertLessEqual(i, len(self.transformed_model))
+                i += 1
+
+            # __str__
+            self.assertEqual(str(self.crosssection), 'x: 0, # Booms: 15, # Spar Caps: 2 \n')
+
+            s = ""
+            for section in self.normal_model:
+                s += str(section)
+
+            self.assertEqual(str(self.normal_model), s)
+
+            # __getitem__ and __setitem__
+
+            for idx, boom in enumerate(self.crosssection):
+
+                self.assertEqual(boom.get_type(), self.crosssection[idx].get_type())
+                self.assertEqual(boom.get_position().all(), self.crosssection[idx].get_position().all())
+                self.assertEqual(boom.get_density(), self.crosssection[idx].get_density())
+
+            for idx, section in enumerate(self.normal_model):
+
+                self.assertEqual(section, self.normal_model[idx])
 
         def test_plots(self):
 
-            for model in [self.model, self.sqmodel, self.beammodel, self.logmodel]:
+            for model in [self.transformed_model, self.sqmodel, self.beammodel, self.logmodel]:
                 fig = plt.figure()
                 ax = Axes3D(fig)
-                model.plot_structure(ax)
+                model.plot_structure(fig, ax, scaled_sizes=True if model == self.transformed_model else False)
 
         def test_boom_coordinate_calculations(self):
 
@@ -627,7 +711,12 @@ if __name__ == "__main__":
 
         def test_real_MOI(self):
 
-            print(self.crosssection.real_MOI('zz'))
+            self.assertGreater(self.crosssection.real_MOI('zz'), self.crosssection.area_MOI('zz'))
+
+            for section in self.normal_model:
+
+                self.assertGreater(section.real_MOI('zz'), section.area_MOI('zz'))
+                self.assertGreater(section.real_MOI('yy'), section.area_MOI('yy'))
 
         def test_boom_update(self):
 

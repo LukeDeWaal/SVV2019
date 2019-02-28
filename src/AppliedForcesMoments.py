@@ -1,11 +1,11 @@
 import numpy as np
 #from src.ForceMomentObjects import Force, Moment, DistributedLoad
-from ForceMomentObjects import Force, Moment, DistributedLoad
+from src.ForceMomentObjects import Force, Moment, DistributedLoad
 import unittest
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 #from src.NumericalTools import step_function, reLu, integrate
-from NumericalTools import step_function, reLu, integrate
+from src.NumericalTools import step_function, reLu, integrate
 
 class ForceMomentSystem(object):
 
@@ -76,9 +76,9 @@ distance_dict = {'x1': 0.172,
                  'Ca': 0.605
                 }
 
-force_dict = {'R1':  [0, 16.1018703e3, -159.47474e3],
-              'R2':  [0, -31.653781e3, 244.549859e3],
-              'R3':  [0, 25.276613e3, -98.186753e3],
+force_dict = {'R1':  [0, 16.1018703e3, 7.386e3],
+              'R2':  [0, -31.653781e3, 0.28964e3],
+              'R3':  [0, 25.276613e3, -13.97463e3],
               'Pi':  [0, Pi*np.sin(distance_dict['theta']), Pi*np.cos(distance_dict['theta'])],
               'Pii': [0, Pii*np.sin(distance_dict['theta']), Pii*np.cos(distance_dict['theta'])],
               'q':   [0, q*np.cos(distance_dict['theta']), q*np.sin(distance_dict['theta'])]}
@@ -88,30 +88,29 @@ def moment_functions(x_vals, forces):
 
     def Mx(x):
 
-        return (+ forces['q'][1] * x *abs(x_vals['Ca']/4-x_vals['ha']/2)\
-               - forces['Pi'][2] * x_vals['ha']/2 *step_function(x,(x_vals['x2']-x_vals['xa']/2))\
-               + forces['Pi'][1] * x_vals['ha'] / 2 * step_function(x, (x_vals['x2'] - x_vals['xa'] / 2))\
-               - forces['Pii'][1] * x_vals['ha'] / 2 * step_function(x, (x_vals['x2'] + x_vals['xa'] / 2))\
-               + forces['Pii'][2] * x_vals['ha'] / 2 * step_function(x, (x_vals['x2'] + x_vals['xa'] / 2)))*-1
+        return (+ forces['q'][1] * x *abs(x_vals['Ca']/4-x_vals['ha']/2)
+                - forces['Pi'][2] * x_vals['ha']/2 * step_function(x,(x_vals['x2']-x_vals['xa']/2))
+                + forces['Pi'][1] * x_vals['ha'] / 2 * step_function(x, (x_vals['x2'] - x_vals['xa'] / 2))
+                - forces['Pii'][1] * x_vals['ha'] / 2 * step_function(x, (x_vals['x2'] + x_vals['xa'] / 2))
+                + forces['Pii'][2] * x_vals['ha'] / 2 * step_function(x, (x_vals['x2'] + x_vals['xa'] / 2)))*-1
 
     def My(x):
 
-        return -forces['q'][2]*(x**2)/2\
-               -forces['R1'][2]*reLu(x,x_vals['x1'])\
-               -forces['Pi'][2]*reLu(x,(x_vals['x2']-x_vals['xa']/2))\
-               -forces['R2'][2] * reLu(x, x_vals['x2'])\
-               +forces['Pii'][2]*reLu(x, (x_vals['x2']+x_vals['xa']/2))\
-               -forces['R3'][2]*reLu(x, x_vals['x3'])
-
+        return (- forces['q'][2]*(x**2)/2
+                - forces['R1'][2]*reLu(x,x_vals['x1'])
+                - forces['Pi'][2]*reLu(x,(x_vals['x2']-x_vals['xa']/2))
+                - forces['R2'][2] * reLu(x, x_vals['x2'])
+                + forces['Pii'][2]*reLu(x, (x_vals['x2']+x_vals['xa']/2))
+                - forces['R3'][2]*reLu(x, x_vals['x3']))
 
     def Mz(x):
 
-        return +forces['q'][1]*(x**2)/2 \
-               -forces['R1'][1]*reLu(x,x_vals['x1'])\
-               -forces['Pi'][1]*reLu(x,(x_vals['x2']-x_vals['xa']/2))\
-               -forces['R2'][1]*reLu(x, x_vals['x2'])\
-               +forces['Pii'][1]*reLu(x, (x_vals['x2']+x_vals['xa']/2))\
-               -forces['R3'][1]*reLu(x,x_vals['x3'])
+        return (+forces['q'][1]*(x**2)/2
+                - forces['R1'][1]*reLu(x,x_vals['x1'])
+                - forces['Pi'][1]*reLu(x,(x_vals['x2']-x_vals['xa']/2))
+                - forces['R2'][1]*reLu(x, x_vals['x2'])
+                + forces['Pii'][1]*reLu(x, (x_vals['x2']+x_vals['xa']/2))
+                - forces['R3'][1]*reLu(x,x_vals['x3']))
 
     return Mx, My, Mz
 
@@ -204,46 +203,17 @@ def plot_moments(N, x_vals, forces):
     plt.show()
 
 
-def plot_displacements(N, x_vals, forces):
 
-    displacement_functions = []
-    displacements = [[], [], []]
-
-    xrange = np.linspace(0, 2.661, N)
-
-    for idx, Mi in enumerate(moment_functions(x_vals, forces)):
-        F = double_integrate(Mi, 0, 2.661)
-        displacement_functions.append(double_integrate(Mi, 0, 2.661))
-
-        for xi in xrange:
-            displacements[idx].append(F(xi))
-
-
-    fig = plt.figure()
-
-    ax1 = plt.subplot(311)
-    plt.plot(xrange, displacements[0])
-    plt.title('Displacement in X')
-    plt.ylabel('Displacement [m]')
-    plt.grid()
-
-    ax2 = plt.subplot(312, sharex=ax1)
-    plt.plot(xrange, displacements[1])
-    plt.title('Displacement in Y')
-    plt.ylabel('Displacement [m]')
-    plt.grid()
-
-    ax3 = plt.subplot(313, sharex=ax1)
-    plt.plot(xrange, displacements[2])
-    plt.title('Displacement in Z')
-    plt.ylabel('Displacement [m]')
-    plt.grid()
-    plt.show()
 
 
 # plot_shear(1000, distance_dict, force_dict)
 # plot_moments(1000, distance_dict, force_dict)
 #plot_displacements(1000, distance_dict, force_dict)
+
+plot_shear(1000, distance_dict, force_dict)
+plot_moments(1000, distance_dict, force_dict)
+# plot_displacements(1000, distance_dict, force_dict)
+
 
 if __name__ == "__main__":
 
