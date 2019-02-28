@@ -9,22 +9,27 @@ import AppliedForcesMoments as AFM
 
 def shear_flow(x_position, test=0):
     """This function is what is called to give shear flows as an output. It takes in the x postion of the 
-    cross section and then uses the forces which are found in the shearflow calculations"""
+    cross section and then uses the forces which are found in the shearflow calculations
+    Returns the shear flows as an array and the twist of the section at a float"""
     
-    force_y, force_z = AFM.shear_functions(x_position, AFM.force_dict)
-    moment_x, moment_y, moment_z = AFM.moment_functions(x_position, AFM.force_dict, test)
+    Fy, Fz = AFM.shear_functions(AFM.distance_dict, AFM.force_dict)
+    force_y, force_z = Fy(x_position), Fz(x_position)
+    Mx, My, Mz = AFM.moment_functions(AFM.distance_dict, AFM.force_dict)
+    moment_x = Mx(x_position)
     
-    return main(x_position, force_y, force_z, moment_x)
+    return main(x_position, force_y, force_z, moment_x, test)
     
 
 def main(x_position, force_y, force_z, moment_x, testing=0):
     """Initlizes and runs program
     returns the shear flow between booms as an array"""
+    #constants
+    G_mod = 28e9 #GPa
     
     #Initilises the other moduals and classes
     globs = scr.get_globals()
     boom_cords = scr.get_crossectional_coordinates(globs[1], globs[0], globs[-1])
-    xsec = scr.CrossSection(boom_cords, x_coordinate=x_position)
+    xsec = scr.CrossSection(boom_cords, x_coordinate=x_position, transform=False)
  
     #Gets the booms
     booms = xsec.get_all_booms() #Booms is a list with each instance of the boom class as an entry
@@ -51,14 +56,13 @@ def main(x_position, force_y, force_z, moment_x, testing=0):
 
     total_shearflows = combined_shearflow(base_shear_flow1, base_shear_flow2, mat_ordered)
     
-    if testing == 0: return total_shear_flows
+    if testing == 0: return total_shearflows, float(rotation) / G_mod
     elif testing == 1:
     ############print stuff#############
         print("Info for testing. The shear flow is defined as positive for anticlockwise flow \n")
-        print ('')
         print ("Base shear flows: \n")
-        print ("Base shear flow in section 1 is {:.3f} N/m".format(base_shear_flow1))
-        print ("Base shear flow in section 2 is {:.3f} N/m".format(base_shear_flow2))
+        print ("Base shear flow in section 1 is {:.3f} N/m".format(float(base_shear_flow1)))
+        print ("Base shear flow in section 2 is {:.3f} N/m".format(float(base_shear_flow2)))
         print ('')
         print ("Variable shear flows: \n")
         for row in  mat_ordered:
@@ -66,10 +70,11 @@ def main(x_position, force_y, force_z, moment_x, testing=0):
                    .format(row[0].get_label(), row[1].get_label(), row[3]))
         print ('')
         print ('Total shear flow through all sections is:')
-        for i in  mat_ordered[:,0]:
+        for i in range(len(mat_ordered[:,0])):
             print ("Total shear flow between boom{} and boom{} is {:.3f} N/m"\
-                   .format(mat_ordered[i][0].get_label(), mat_ordered[i][1].get_label(), total_shearflows[i]))
+                   .format(mat_ordered[i][0].get_label(), mat_ordered[i][1].get_label(), float(total_shearflows[i])))
         print('')
+        print('Angle of twist is {} deg \n'.format(float(rotation) / G_mod))
         print("#" * 60)
     
 def split_booms(booms):
@@ -79,10 +84,13 @@ def split_booms(booms):
         #print(boom)
     #print(len(booms))
     area1 = booms[:5]
-    area2 = list(booms[4:])
+    area2 = list(booms[5:])
     area2.append(booms[0])
+    area2.append(booms[4])
     area2 = np.array(area2)
     #print(area2)
+    #for boom in area2:
+        #print(boom)
     
     return area1, area2
 
@@ -103,12 +111,14 @@ def calc_Vshear_flows(booms, F, xsec):
     prev_shear_flow = 0 #as caclulations start at cut, initial shearflow is 0
     
     for i in range(len(booms)):
-        
+        #print(prev_shear_flow)
         shear_flow = coef1 * booms[i].get_size() * booms[i].get_position()[2] + \
             coef2 * booms[i].get_size() * booms[i].get_position()[1] + prev_shear_flow
-       
+        
         prev_shear_flow = shear_flow
         shear_flows[i] = shear_flow
+    #print(prev_shear_flow)
+    #print('')
     return shear_flows
                                   
 def det_base_shearflow(mat, force, moment=0):
@@ -191,13 +201,14 @@ def det_base_shearflow(mat, force, moment=0):
     b[2] = A3 * -coef2
     #print(b)
     #print(A_mat)
-    
-    x = np.linalg.solve(A_mat.astype(float), b.astype(float))
-    
-    #print(x)
-    
-    return x
-    #pass
+    if np.linalg.det(A_mat.astype(float)) == 0:
+        return np.zeros((3, 1))
+    else:
+        x = np.linalg.solve(A_mat.astype(float), b.astype(float))
+        #print(x)
+        return x
+   
+
 
 def order_booms(shear_flows1, shear_flows2, boom_sec1, boom_sec2, xsec):
     """ """
@@ -215,18 +226,22 @@ def order_booms(shear_flows1, shear_flows2, boom_sec1, boom_sec2, xsec):
         length = np.linalg.norm(boom1.get_position() - boom0.get_position())
         mat[row_mat] = np.array([boom0, boom1, length, shear_flows1[i], 1e-3, '1', (A1, 0)])
         row_mat += 1
-    #print(mat)
-    for i in range(0, len(boom_sec2) - 1, 1): #adds skin booms from area 2
+
+    length = np.linalg.norm(boom_sec2[0].get_position() - boom_sec1[-1].get_position())
+    mat[row_mat] = np.array([boom_sec1[-1], boom_sec2[0], length, shear_flows2[-1], 1.1e-3, '2', (A1, A2)])
+    row_mat += 1 #shear flows from boom sec 2 are 0 through boom4-boom5
+    for i in range(0, len(boom_sec2) - 2, 1): #adds skin booms from area 2
         boom0 = boom_sec2[i]
         boom1 = boom_sec2[i+1]
         length = np.linalg.norm(boom1.get_position() - boom0.get_position())
         mat[row_mat] = np.array([boom0, boom1, length, shear_flows2[i], 1e-3, '2', (0, A2)])
         row_mat += 1
-        #print(row_mat)
+    
     #add the spar to the  matrix at the end, defined as going from boom9 to boom 3
     length = np.linalg.norm(boom_sec1[0].get_position() - boom_sec1[-1].get_position())
-    mat[row_mat] = np.array([boom_sec1[-1], boom_sec1[0], length, shear_flows1[-1] - shear_flows2[-1], 2.8e-3, 'both',(A1, A2)])
+    mat[row_mat] = np.array([boom_sec1[-1], boom_sec1[0], length, shear_flows1[-1] - shear_flows2[-2], 2.8e-3, 'both',(A1, A2)])
     #shear flow through the spar is defined as positive for section A
+    #for row in mat: print("From boom{} to boom{}, shear flow is {:.3f} N/m".format(row[0].get_label(), row[1].get_label(), row[3]))
     return mat
                             
     
@@ -261,7 +276,7 @@ def test_cases(x_pos=None):
         3 = 100N in positive z direction \n \
         4 = 94kN in positive y direction")
         print("#" * 60)
-        case = input("Case: ")
+        case = int(input("Case: "))
         if case == 1:
             main(0, 100, 100, 0, 1)
         elif case == 2:
@@ -270,13 +285,18 @@ def test_cases(x_pos=None):
             main(0, 0, 100, 0, 1)
         elif case == 4:
             main(0, 94e3, 0, 0, 1)
+    elif x_pos == 7:
+        main(0, 100, 0, 1)
     else: #This allows a test of output from an actual case
-        __ = shear_flow(x_pos, 1)
+        __ = shear_flow(float(x_pos), 1) 
+    
+        
     
     input("\n Press any key to close")
 
     
 ###################
-test_cases(0)
+#Testing
+#test_cases(1)
     
 
