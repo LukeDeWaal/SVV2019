@@ -76,9 +76,9 @@ distance_dict = {'x1': 0.172,
                  'Ca': 0.605
                 }
 
-force_dict = {'R1':  [0, 16.1018703e3, 7.386e3],
-              'R2':  [0, -31.653781e3, 0.28964e3],
-              'R3':  [0, 25.276613e3, -13.97463e3],
+force_dict = {'R1':  [0, 16.1018703e3, -159.47474e3],
+              'R2':  [0, -31.653781e3, 244.549859e3],
+              'R3':  [0, 25.276613e3, -98.186753e3],
               'Pi':  [0, Pi*np.sin(distance_dict['theta']), Pi*np.cos(distance_dict['theta'])],
               'Pii': [0, Pii*np.sin(distance_dict['theta']), Pii*np.cos(distance_dict['theta'])],
               'q':   [0, q*np.cos(distance_dict['theta']), q*np.sin(distance_dict['theta'])]}
@@ -201,8 +201,6 @@ def plot_moments(N, x_vals, forces):
     plt.ylabel('Moment [N*m]')
     plt.grid()
     plt.show()
-
-
 
 
 plot_shear(1000, distance_dict, force_dict)
