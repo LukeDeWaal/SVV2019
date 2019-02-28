@@ -205,9 +205,15 @@ def plot_moments(N, x_vals, forces):
 
 
 
+
+# plot_shear(1000, distance_dict, force_dict)
+# plot_moments(1000, distance_dict, force_dict)
+#plot_displacements(1000, distance_dict, force_dict)
+
 plot_shear(1000, distance_dict, force_dict)
 plot_moments(1000, distance_dict, force_dict)
 # plot_displacements(1000, distance_dict, force_dict)
+
 
 if __name__ == "__main__":
 
