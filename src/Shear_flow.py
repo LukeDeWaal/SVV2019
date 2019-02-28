@@ -9,7 +9,8 @@ import AppliedForcesMoments as AFM
 
 def shear_flow(x_position, test=0):
     """This function is what is called to give shear flows as an output. It takes in the x postion of the 
-    cross section and then uses the forces which are found in the shearflow calculations"""
+    cross section and then uses the forces which are found in the shearflow calculations
+    Returns the shear flows as an array and the twist of the section at a float"""
     
     Fy, Fz = AFM.shear_functions(AFM.distance_dict, AFM.force_dict)
     force_y, force_z = Fy(x_position), Fz(x_position)
@@ -22,6 +23,8 @@ def shear_flow(x_position, test=0):
 def main(x_position, force_y, force_z, moment_x, testing=0):
     """Initlizes and runs program
     returns the shear flow between booms as an array"""
+    #constants
+    G_mod = 28e9 #GPa
     
     #Initilises the other moduals and classes
     globs = scr.get_globals()
@@ -53,7 +56,7 @@ def main(x_position, force_y, force_z, moment_x, testing=0):
 
     total_shearflows = combined_shearflow(base_shear_flow1, base_shear_flow2, mat_ordered)
     
-    if testing == 0: return total_shearflows
+    if testing == 0: return total_shearflows, float(rotation) / G_mod
     elif testing == 1:
     ############print stuff#############
         print("Info for testing. The shear flow is defined as positive for anticlockwise flow \n")
@@ -71,6 +74,7 @@ def main(x_position, force_y, force_z, moment_x, testing=0):
             print ("Total shear flow between boom{} and boom{} is {:.3f} N/m"\
                    .format(mat_ordered[i][0].get_label(), mat_ordered[i][1].get_label(), float(total_shearflows[i])))
         print('')
+        print('Angle of twist is {} deg \n'.format(float(rotation) / G_mod))
         print("#" * 60)
     
 def split_booms(booms):
@@ -292,6 +296,7 @@ def test_cases(x_pos=None):
 
     
 ###################
+#Testing
 #test_cases(1)
     
 
