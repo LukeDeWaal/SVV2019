@@ -1,5 +1,9 @@
 import numpy as np
 from src.Structure import get_crossectional_coordinates, CrossSection
+from src.Shear_flow import shear_flow
+from src.StructuralCalculations.von_mises_stress import shear_stress
+import src.AppliedForcesMoments as AFM
+
 """
 Shear Calculations
 """
@@ -108,7 +112,10 @@ h_stringer = 1.6*10**(-2)
 coordinates = get_crossectional_coordinates(Ca, ha, h_stringer)
 crosssection = CrossSection(coordinates, )
 
+shear_stresses_C=shear_stress(shear_flow(AFM.distance_dict['x2']+AFM.distance_dict['xa']/2)[0])
 q_web_1, q_web_2=NumericalShear_Rib(crosssection).rib_shear(np.ones(17))
 
 print ('q_web_1', q_web_1)
 print ('q_web_2', q_web_2)
+
+
