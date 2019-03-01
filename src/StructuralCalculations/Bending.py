@@ -140,9 +140,6 @@ if __name__ == "__main__":
                 zz += section.real_MOI('zz') * 10 ** 12
                 yy += section.real_MOI('yy') * 10 ** 12
 
-            print((zz/self.N)/1.006E+07)
-            print((yy/self.N)/1.399E+08)
-
             fig = plt.figure()
             ax = Axes3D(fig)
 

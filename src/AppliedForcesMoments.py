@@ -4,7 +4,6 @@ from src.ForceMomentObjects import Force, Moment, DistributedLoad
 import unittest
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
-#from src.NumericalTools import step_function, reLu, integrate
 from src.NumericalTools import step_function, reLu, integrate
 
 class ForceMomentSystem(object):
@@ -204,8 +203,8 @@ def plot_moments(N, x_vals, forces):
 
 
 
-# plot_shear(1000, distance_dict, force_dict)
-# plot_moments(1000, distance_dict, force_dict)
+plot_shear(1000, distance_dict, force_dict)
+plot_moments(1000, distance_dict, force_dict)
 #plot_displacements(1000, distance_dict, force_dict)
 
 
@@ -218,7 +217,21 @@ if __name__ == "__main__":
 
             list_of_forces = [Force(np.random.randint(-10, 10, (3, 1)), np.random.randint(-10, 10, (3, 1)))]
             list_of_moments = [Moment(np.random.randint(-10, 10, (3, 1)), np.random.randint(-10, 10, (3, 1)))]
-            list_of_distr_forces = [DistributedLoad(10, np.random.randint(-10, 10, (3, 1)), np.random.randint(-10, 10, (3, 1)), np.random.randint(-10, 10, (3, 1)))]
+            list_of_distr_forces = [DistributedLoad(10, np.random.randint(-10, 10, (3, 1)), np.random.randint(-10, 10, (3, 1)), np.random.randint(-10, 10, (3, 1)), 10)]
 
             self.system = ForceMomentSystem(list_of_forces, list_of_moments, list_of_distr_forces)
+            self.moments = moment_functions(distance_dict, force_dict)
 
+        def test_moment_functions(self):
+
+            for moment in self.moments:
+
+                self.assertAlmostEqual(moment(0.0), 0.0)
+                self.assertAlmostEqual(moment(2.661), 0.0)
+
+
+    def run_TestCases():
+        suite = unittest.TestLoader().loadTestsFromTestCase(ForceMomentSystemTestCases)
+        unittest.TextTestRunner(verbosity=2).run(suite)
+
+    run_TestCases()

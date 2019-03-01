@@ -4,9 +4,8 @@
     <list default="true" id="580e7e6b-b616-44ec-9938-20505707976d" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/AppliedForcesMoments.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/AppliedForcesMoments.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/NumericalTools.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/NumericalTools.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/StructuralCalculations/Bending.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/StructuralCalculations/Bending.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Structure.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Structure.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/validate_shear.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/validate_shear.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -20,6 +19,7 @@
     <SUITE FILE_PATH="coverage/SVV2019$pytest_in_ForceMomentObjects_py.coverage" NAME="pytest in ForceMomentObjects.py Coverage Results" MODIFIED="1551260048062" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
     <SUITE FILE_PATH="coverage/SVV2019$Bending.coverage" NAME="Bending Coverage Results" MODIFIED="1551263687402" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/StructuralCalculations" />
     <SUITE FILE_PATH="coverage/SVV2019$pytest_for_Idealizations_IdealizationTestCases.coverage" NAME="pytest for Idealizations.IdealizationTestCases Coverage Results" MODIFIED="1551196693182" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
+    <SUITE FILE_PATH="coverage/SVV2019$von_mises_stress.coverage" NAME="von_mises_stress Coverage Results" MODIFIED="1551435278241" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/StructuralCalculations" />
     <SUITE FILE_PATH="coverage/SVV2019$AppliedForcesMoments.coverage" NAME="AppliedForcesMoments Coverage Results" MODIFIED="1550763830826" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
     <SUITE FILE_PATH="coverage/SVV2019$TestRun.coverage" NAME="TestRun Coverage Results" MODIFIED="1551200268023" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
   </component>
@@ -28,7 +28,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Idealizations.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-102">
+            <state relative-caret-position="17">
               <caret line="6" selection-start-line="6" selection-end-line="6" />
               <folding>
                 <element signature="e#43#61#0" expanded="true" />
@@ -37,11 +37,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Structure.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-4131">
-              <caret line="91" column="11" lean-forward="true" selection-start-line="91" selection-start-column="11" selection-end-line="91" selection-end-column="11" />
+            <state relative-caret-position="948">
+              <caret line="744" lean-forward="true" selection-start-line="744" selection-end-line="744" />
               <folding>
                 <element signature="e#82#130#0" expanded="true" />
               </folding>
@@ -49,11 +49,32 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/AppliedForcesMoments.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="254">
-              <caret line="79" column="53" lean-forward="true" selection-start-line="79" selection-start-column="53" selection-end-line="79" selection-end-column="53" />
+            <state relative-caret-position="3175">
+              <caret line="235" lean-forward="true" selection-start-line="235" selection-end-line="235" />
+              <folding>
+                <element signature="e#0#18#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/validate_shear.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="421">
+              <caret line="62" column="110" selection-start-line="62" selection-start-column="110" selection-end-line="62" selection-end-column="110" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/StructuralCalculations/von_mises_stress.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1479">
+              <caret line="87" column="65" lean-forward="true" selection-start-line="87" selection-start-column="65" selection-end-line="87" selection-end-column="65" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -65,7 +86,7 @@
         <entry file="file://$PROJECT_DIR$/src/StructuralCalculations/Bending.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="404">
-              <caret line="139" column="55" lean-forward="true" selection-start-line="139" selection-start-column="55" selection-end-line="139" selection-end-column="55" />
+              <caret line="73" column="39" lean-forward="true" selection-start-line="73" selection-start-column="39" selection-end-line="73" selection-end-column="39" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -76,7 +97,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/ForceMomentObjects.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2125">
+            <state relative-caret-position="-697">
               <caret line="6" selection-start-line="6" selection-end-line="6" />
               <folding>
                 <element signature="e#45#63#0" expanded="true" />
@@ -88,8 +109,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/NumericalTools.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1292">
-              <caret line="76" lean-forward="true" selection-start-line="76" selection-end-line="76" />
+            <state relative-caret-position="1258">
+              <caret line="76" selection-start-line="76" selection-end-line="76" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -134,9 +155,10 @@
         <option value="$PROJECT_DIR$/src/Idealizations.py" />
         <option value="$PROJECT_DIR$/src/OverviewPlot.py" />
         <option value="$PROJECT_DIR$/src/ForceMomentObjects.py" />
-        <option value="$PROJECT_DIR$/src/AppliedForcesMoments.py" />
         <option value="$PROJECT_DIR$/src/NumericalTools.py" />
         <option value="$PROJECT_DIR$/src/Structure.py" />
+        <option value="$PROJECT_DIR$/src/validate_shear.py" />
+        <option value="$PROJECT_DIR$/src/AppliedForcesMoments.py" />
         <option value="$PROJECT_DIR$/src/StructuralCalculations/Bending.py" />
       </list>
     </option>
@@ -151,7 +173,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -179,6 +200,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -197,7 +219,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.Bending">
+  <component name="RunManager" selected="Python.AppliedForcesMoments">
     <configuration name="AppliedForcesMoments" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="SVV2019" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -221,6 +243,9 @@
       <module name="SVV2019" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/StructuralCalculations" />
       <option name="IS_MODULE_SDK" value="true" />
@@ -236,54 +261,13 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="NumericalTools" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="SVV2019" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/NumericalTools.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="true" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="OverviewPlot" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="SVV2019" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/OverviewPlot.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="true" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
     <configuration name="Structure" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="SVV2019" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src" />
       <option name="IS_MODULE_SDK" value="true" />
@@ -299,20 +283,64 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="validate_shear" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="SVV2019" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/validate_shear.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="von_mises_stress" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="SVV2019" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/StructuralCalculations" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/StructuralCalculations/von_mises_stress.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <list>
-      <item itemvalue="Python.NumericalTools" />
-      <item itemvalue="Python.OverviewPlot" />
       <item itemvalue="Python.Structure" />
       <item itemvalue="Python.Bending" />
       <item itemvalue="Python.AppliedForcesMoments" />
+      <item itemvalue="Python.validate_shear" />
+      <item itemvalue="Python.von_mises_stress" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.AppliedForcesMoments" />
+        <item itemvalue="Python.von_mises_stress" />
+        <item itemvalue="Python.validate_shear" />
         <item itemvalue="Python.Bending" />
         <item itemvalue="Python.Structure" />
-        <item itemvalue="Python.AppliedForcesMoments" />
-        <item itemvalue="Python.Bending" />
-        <item itemvalue="Python.OverviewPlot" />
       </list>
     </recent_temporary>
   </component>
@@ -340,7 +368,8 @@
       <workItem from="1551186585711" duration="12148000" />
       <workItem from="1551255027227" duration="1925000" />
       <workItem from="1551257300347" duration="22451000" />
-      <workItem from="1551343438207" duration="16260000" />
+      <workItem from="1551343438207" duration="16728000" />
+      <workItem from="1551435123606" duration="2364000" />
     </task>
     <servers />
   </component>
@@ -353,13 +382,13 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="140600000" />
+    <option name="totallyTimeSpent" value="143432000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49921754" visible="true" weight="0.17324094" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49921754" visible="true" weight="0.1748401" />
       <window_info id="Structure" order="1" sideWeight="0.5007825" side_tool="true" weight="0.1684435" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -469,6 +498,16 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/NumericalTools.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1258">
+          <caret line="76" selection-start-line="76" selection-end-line="76" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/OverviewPlot.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="85">
@@ -476,39 +515,26 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/ForceMomentObjects.py">
+    <entry file="file://$PROJECT_DIR$/src/StructuralCalculations/von_mises_stress.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2125">
-          <caret line="6" selection-start-line="6" selection-end-line="6" />
-          <folding>
-            <element signature="e#45#63#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/AppliedForcesMoments.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="254">
-          <caret line="79" column="53" lean-forward="true" selection-start-line="79" selection-start-column="53" selection-end-line="79" selection-end-column="53" />
+        <state relative-caret-position="1479">
+          <caret line="87" column="65" lean-forward="true" selection-start-line="87" selection-start-column="65" selection-end-line="87" selection-end-column="65" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/NumericalTools.py">
+    <entry file="file://$PROJECT_DIR$/src/validate_shear.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1292">
-          <caret line="76" lean-forward="true" selection-start-line="76" selection-end-line="76" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="421">
+          <caret line="62" column="110" selection-start-line="62" selection-start-column="110" selection-end-line="62" selection-end-column="110" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Idealizations.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-102">
+        <state relative-caret-position="17">
           <caret line="6" selection-start-line="6" selection-end-line="6" />
           <folding>
             <element signature="e#43#61#0" expanded="true" />
@@ -516,10 +542,20 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/ForceMomentObjects.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-697">
+          <caret line="6" selection-start-line="6" selection-end-line="6" />
+          <folding>
+            <element signature="e#45#63#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/StructuralCalculations/Bending.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="404">
-          <caret line="139" column="55" lean-forward="true" selection-start-line="139" selection-start-column="55" selection-end-line="139" selection-end-column="55" />
+          <caret line="73" column="39" lean-forward="true" selection-start-line="73" selection-start-column="39" selection-end-line="73" selection-end-column="39" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
@@ -528,10 +564,20 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Structure.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-4131">
-          <caret line="91" column="11" lean-forward="true" selection-start-line="91" selection-start-column="11" selection-end-line="91" selection-end-column="11" />
+        <state relative-caret-position="948">
+          <caret line="744" lean-forward="true" selection-start-line="744" selection-end-line="744" />
           <folding>
             <element signature="e#82#130#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/AppliedForcesMoments.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3175">
+          <caret line="235" lean-forward="true" selection-start-line="235" selection-end-line="235" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
           </folding>
         </state>
       </provider>
