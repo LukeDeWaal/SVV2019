@@ -83,6 +83,19 @@ def x_axis_rotation(point: np.array, angle: float) -> np.array:
     return np.matmul(A(angle), point.reshape((3,1)))
 
 
+def z_axis_translation(point: np.array, d: float) -> np.array:
+
+    return point.reshape((3,1)) + np.array([0,0,d]).reshape((3,1))
+
+
+def AOT_rotation(point: np.array, angle: float, centroid=np.array([0,0,0])):
+
+    p_1 = z_axis_translation(point, -centroid[2])
+    p_2 = x_axis_rotation(p_1, -angle)
+
+    return z_axis_translation(p_2, centroid[2]).reshape((3,))
+
+
 def xy_plane_reflection(point: np.array) -> np.array:
 
     A = np.array([[1,0,0],[0,1,0],[0,0,-1]], dtype=float)

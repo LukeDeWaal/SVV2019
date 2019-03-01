@@ -5,6 +5,7 @@ from src.Shear_flow import shear_flow
 import src.AppliedForcesMoments as AFM
 from src.StructuralCalculations.Bending import *
 from src.AppliedForcesMoments import moment_functions
+from src.NumericalTools import AOT_rotation
 
 #function to get the vertical displacement at any point along the x axis
 def Displacement(R1y, R2y, R3y, P1, P2, q, theta, x):
@@ -78,45 +79,49 @@ def angle_twist(distance):
     index=round(distance*N/AFM.distance_dict['ba'])
 
     #sum up the angles of twist up to that location
-    for i, model in enumerate(normal_model[:index]):
+    for i, section in enumerate(normal_model[:index]):
 
         distance_sections=i*AFM.distance_dict['ba']/N
         total_angle=total_angle+ shear_flow(i*distance_sections)[1]*distance_sections
 
     #get the radii of the cross section of interest
-    centroid = model.get_centroid()
-    radii_section=[np.linalg.norm(coordinate - centroid) for coordinate in model.get_all_coordinates()]
-    relative_position_y = [(coordinate - centroid)[1] for coordinate in model.get_all_coordinates()]
-    relative_position_z = [(coordinate - centroid)[2] for coordinate in model.get_all_coordinates()]
+    centroid = section.get_centroid()
+    radii_section=[np.linalg.norm(coordinate - centroid) for coordinate in section.get_all_coordinates()]
+    relative_position_y = [(coordinate - centroid)[1] for coordinate in section.get_all_coordinates()]
+    relative_position_z = [(coordinate - centroid)[2] for coordinate in section.get_all_coordinates()]
 
 
     #return total angle of twist and array of radii from centroic
-    return total_angle, np.array(radii_section), relative_position_y, relative_position_z
+    return total_angle, np.array(radii_section), relative_position_y, relative_position_z, centroid, section.get_all_coordinates()
 
 #set the distance of interest (in this case is rib C)
-distance=float(AFM.distance_dict['x1'])
+distance=float(AFM.distance_dict['x1']+AFM.distance_dict['xa']/2)
 
-
-twist_angle_rib_C, radii, relative_position_y, relative_position_z=angle_twist(distance)
+7
+twist_angle_rib_C, radii, relative_position_y, relative_position_z, centroid, all_coordinates = angle_twist(distance)
 
 #find the displacement of the booms by adding up the vertical due to shear and the one due to the twist
-def total_displacement(y_displacement, angle_of_twist, radii, distance, relative_position_y, relative_position_z):
+def total_displacement(y_displacement, angle_of_twist, radii, distance, relative_position_y, relative_position_z, centroid, all_coordinates):
 
 
     # luke check if the sign are correct but I think it should be fine
-    y_displacements=radii*np.sin(angle_of_twist)*np.sign(relative_position_z)*-1
-    z_displacements = radii * np.cos(angle_of_twist)*np.sign(relative_position_y)
+    # y_displacements=radii*np.sin(angle_of_twist)*np.sign(relative_position_z)*-1
+    # z_displacements = radii * np.cos(angle_of_twist)*np.sign(relative_position_y)
+    #
+    new_coordinates = np.array([AOT_rotation(point=coordinate, angle=angle_of_twist, centroid=centroid) for coordinate in all_coordinates])
 
+    y_displacements = np.array([new[1] - old[1] for new, old in zip(new_coordinates, all_coordinates)])
+    z_displacements = np.array([new[2] - old[2] for new, old in zip(new_coordinates, all_coordinates)])
+    print(y_displacement)
     #add the displacement due to bending
     y_displacements=-y_displacements+y_displacement
-
 
     displacements=[z_displacements, y_displacements]
 
 
     return displacements
 
-
-print (total_displacement(Displacement(R1y, R2y, R3y, P1, P2, q, theta, distance), twist_angle_rib_C, radii, distance, relative_position_y, relative_position_z))
+a = total_displacement(Displacement(R1y, R2y, R3y, P1, P2, q, theta, distance), twist_angle_rib_C, radii, distance, relative_position_y, relative_position_z, centroid, all_coordinates)
+print (a)
 
 
