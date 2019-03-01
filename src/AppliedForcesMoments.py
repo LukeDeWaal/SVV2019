@@ -1,11 +1,11 @@
 import numpy as np
+from ForceMomentObjects import Force, Moment, DistributedLoad
 #from src.ForceMomentObjects import Force, Moment, DistributedLoad
-from src.ForceMomentObjects import Force, Moment, DistributedLoad
 import unittest
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 #from src.NumericalTools import step_function, reLu, integrate
-from src.NumericalTools import step_function, reLu, integrate
+from NumericalTools import step_function, reLu, integrate
 
 class ForceMomentSystem(object):
 
@@ -76,9 +76,9 @@ distance_dict = {'x1': 0.172,
                  'Ca': 0.605
                 }
 
-force_dict = {'R1':  [0, -38535.63, 157924.99],
-              'R2':  [0, 64131.88, -241717.75],
-              'R3':  [0, -15871.55, 96904.39],
+force_dict = {'R1':  [0, -34990.32, 117433.67],
+              'R2':  [0, 57917.31, -170740.58],
+              'R3':  [0, -13202.29, 66418.53],
               'Pi':  [0, Pi*np.sin(distance_dict['theta']), Pi*np.cos(distance_dict['theta'])],
               'Pii': [0, Pii*np.sin(distance_dict['theta']), Pii*np.cos(distance_dict['theta'])],
               'q':   [0, q*np.cos(distance_dict['theta']), q*np.sin(distance_dict['theta'])]}
