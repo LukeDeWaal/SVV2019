@@ -2,14 +2,14 @@
 already been idealized as booms"""
 """written for SVV at TU Delft, faculty of Aerospace Enigneering, 2019"""
 
-#import src.Structure as scr
-#import numpy as np
-#from src.ForceMomentObjects import *
-#import src.AppliedForcesMoments as AFM
-import Structure as scr
+import src.Structure as scr
 import numpy as np
-from ForceMomentObjects import *
-import AppliedForcesMoments as AFM
+from src.ForceMomentObjects import *
+import src.AppliedForcesMoments as AFM
+#import Structure as scr
+#import numpy as np
+#from ForceMomentObjects import *
+#import AppliedForcesMoments as AFM
 
 def shear_flow(x_position, test=0):
     """This function is what is called to give shear flows as an output. It takes in the x postion of the 
