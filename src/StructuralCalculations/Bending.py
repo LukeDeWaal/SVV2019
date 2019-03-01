@@ -71,7 +71,8 @@ class NumericalBending:
                      + stiffner_areas
 
         for idx, boom in enumerate(self.__cross_section):
-            boom.set_size(boom_areas[idx])
+            area = abs(boom_areas[idx])
+            boom.set_size(9*area if area < 1.463265990546657e-05 else area)
 
             # if boom.get_size() < 0:
             #     print(boom)
@@ -112,11 +113,11 @@ if __name__ == "__main__":
 
             self.coordinates = get_crossectional_coordinates(self.Ca, self.ha, self.h_stringer)
 
-            self.N = 50
+            self.N = 15
 
             self.crosssection = CrossSection(self.coordinates, transform=False)
             self.transformed_model = FullModel(self.coordinates, (10e-10, self.ba), self.N, transform=True)
-            self.normal_model = FullModel(self.coordinates, (10e-10, self.ba), self.N, transform=False)
+            self.normal_model = FullModel(self.coordinates, (10e-20, self.ba), self.N, transform=False)
 
         #@unittest.skip
         def test_boom_area_plot(self):
@@ -128,14 +129,16 @@ if __name__ == "__main__":
             #     stresses = calculations.calculate_bending_stress(Mz, My)
             #     calculations.boom_areas_calculator(stresses)
 
-            #for section in self.normal_model:
-            calculations = NumericalBending(self.normal_model[0])
-            stresses = calculations.calculate_bending_stress(Mz, My)
-            calculations.boom_areas_calculator(stresses)
+            yy = 0
+            zz = 0
 
-            # for section in self.normal_model:
-            #     for boom in section:
-            #         print(boom)
+            for section in self.normal_model:
+                calculations = NumericalBending(section)
+                stresses = calculations.calculate_bending_stress(Mz, My)
+                calculations.boom_areas_calculator(stresses)
+
+                zz += section.real_MOI('zz') * 10 ** 12
+                yy += section.real_MOI('yy') * 10 ** 12
 
             fig = plt.figure()
             ax = Axes3D(fig)

@@ -1,7 +1,10 @@
 ##Imports
-import Structure as scr
+import src.Structure as scr
 import numpy as np
-import Shear_flow as sf
+
+#import Shear_flow as sf
+import src.Shear_flow as sf
+
 
 
 ##Code
@@ -37,6 +40,7 @@ def main(x_position, shear_flows):
     print("Shear in x is {} N".format(shear_forces[0]))
     print("Shear in y is {} N".format(shear_forces[1]))
     print("Shear in z is {} N".format(shear_forces[2]))
+
     
     return shear_forces
     
@@ -59,12 +63,13 @@ def order_data(shear_flows, booms):
         F_vec = length * r_dir_vec * shear_flows[i]
         mat[i] = np.array([boom0, boom1, shear_flows[i], length, r_dir_vec, F_vec])
         #print(boom0.get_label(), boom1.get_label(), shear_flows[i], length, r_dir_vec, F_vec)
+
     #for the last row
     r_vec = booms[0].get_position() - booms[4].get_position()
     length = np.linalg.norm(r_vec)
-    mat[-1] = np.array([booms[4], booms[0], shear_flows[-1], length, \
-                       r_vec / length, shear_flows[-1] * r_vec])
+    mat[-1] = np.array([booms[4], booms[0], shear_flows[-1], length, r_vec / length, shear_flows[-1] * r_vec])
     
     return mat 
+
     
-verify_shear(1)
+#verify_shear(0.95)

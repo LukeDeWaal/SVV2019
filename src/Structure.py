@@ -283,6 +283,8 @@ class CrossSection:
         """
         MOI = 0
 
+        centroid = self.get_centroid()
+
         if axes == 'z' or axes == 'zz':
             idx1 = idx2 = 1
 
@@ -297,7 +299,7 @@ class CrossSection:
             return -1
 
         for boom in self.get_all_booms():
-            MOI += boom.get_size() * (boom.get_position()[idx1] * boom.get_position()[idx2])
+            MOI += boom.get_size() * ((boom.get_position()[idx1] - centroid[idx1]) * (boom.get_position()[idx2] - centroid[idx2]))
 
         return MOI
 
@@ -311,25 +313,25 @@ class CrossSection:
 
         if axes == 'z' or axes == 'zz':
             idx1 = idx2 = 1
+            axis = np.array([0, 0, 1])
 
         elif axes == 'y' or axes == 'yy':
             idx1 = idx2 = 2
-
-        elif axes == 'zy' or axes == 'yz':
-            idx1 = 1
-            idx2 = 2
+            axis = np.array([0, 1, 0])
 
         else:
             return -1
 
         MOI = self.area_MOI(axes=axes)
 
+        centroid = self.get_centroid()
+
         for skin in self.get_skin_objects():
 
-            angle = self.angle_between(np.array([0, 0, 1]), skin.get_position('end') - skin.get_position('start'))
+            angle = self.angle_between(axis, skin.get_position('end') - skin.get_position('start'))
             angularterms = [0, np.sin(angle), np.cos(angle)]
 
-            MOI += 1.0 / 12.0 * skin.get_thickness() * (skin.get_length() ** 3) * (angularterms[idx1]*angularterms[idx2]) + skin.get_area()*(skin.get_center()[idx1]*skin.get_center()[idx2])
+            MOI += 1.0 / 12.0 * skin.get_thickness() * (skin.get_length() ** 3) * (angularterms[idx1]*angularterms[idx2]) + skin.get_area()*((skin.get_center()[idx1] - centroid[idx1])*(skin.get_center()[idx2] - centroid[idx2]))
 
         return MOI
 
@@ -340,20 +342,6 @@ class CrossSection:
         """
         old_size = self.get_all_booms()[idx].get_size()
         self.get_all_booms()[idx].set_size(old_size + size_increment)
-
-    def calculate_boom_area(self, idx: int):
-
-        boom = self[idx]
-        connected_booms = [self[idx + 1], self[idx - 1]]
-
-        if boom.get_type() == 'Sparcap':
-            if idx == 0:
-                connected_booms += [self[4]]
-            elif idx == 4:
-                connected_booms += [self[0]]
-            else:
-                raise TypeError
-
 
 
     def get_mass(self) -> float or int:
@@ -405,8 +393,6 @@ class CrossSection:
         :return: Array of sparcap coordinates
         """
         return self.__sparcap_coordinates
-
-
 
 
 class FullModel(object):
@@ -498,8 +484,8 @@ class FullModel(object):
         zboomplot = coordinates[:, 2]
 
         ax.set_xlim3d(self.__xrange[0], self.__xrange[1])
-        ax.set_ylim3d(-0.3, 0.3)
-        ax.set_zlim3d(0.0, 0.6)
+        ax.set_ylim3d(-0.1, 0.6)
+        ax.set_zlim3d(-0.3, 0.3)
 
         # Lines around crosssection
         xlineplot_1 = [[] for _ in range(self.__N)]
@@ -537,30 +523,30 @@ class FullModel(object):
                     sizes.append(boom.get_size())
 
             sizes = np.array(sizes)
-            #sizes = (sizes - np.min(sizes))/(np.max(sizes) - np.min(sizes))*100.0
+            sizes = (sizes - np.min(sizes))/(np.max(sizes) - np.min(sizes))*100.0
 
             cs = sizes
             colorsMap = 'viridis'
-            cmx = plt.get_cmap(colorsMap)
+            cmap = plt.get_cmap(colorsMap)
             cNorm = clr.Normalize(vmin=min(cs), vmax=max(cs))
-            scalarMap = cm.ScalarMappable(norm=cNorm, cmap=cmx)
+            scalarMap = cm.ScalarMappable(norm=cNorm, cmap=cmap)
 
-            ax.scatter3D(xboomplot, yboomplot, zboomplot, s=40, c=scalarMap.to_rgba(cs))
+            ax.scatter3D(xboomplot, zboomplot, yboomplot, s=40, c=scalarMap.to_rgba(cs))
             scalarMap.set_array(cs)
-            fig.colorbar(scalarMap, label='Boom Size')
+            fig.colorbar(scalarMap, label='Boom Size [%]', cax=fig.add_axes([0.85, 0.10, 0.05, 0.75]))
 
         else:
             sizes = 40
 
-            ax.scatter3D(xboomplot, yboomplot, zboomplot, s=sizes)
+            ax.scatter3D(xboomplot, zboomplot, yboomplot, s=sizes)
 
         wire_colour = '0.5'
 
         for i in range(self.__N):
-            ax.plot(xlineplot_1[i], ylineplot_1[i], zlineplot_1[i], wire_colour)
+            ax.plot(xlineplot_1[i], zlineplot_1[i], ylineplot_1[i], wire_colour)
 
         for i in range(17):
-            ax.plot(xlineplot_2[i], ylineplot_2[i], zlineplot_2[i], wire_colour)
+            ax.plot(xlineplot_2[i], zlineplot_2[i], ylineplot_2[i], wire_colour)
 
     def get_discr_mass(self) -> float:
         return sum([section.get_mass() for section in self.get_sections()])
