@@ -1,6 +1,6 @@
 import numpy as np
-from reactionforcesolver import reaction_force_solver
-from displacementfunction import displacement_y
+from src.reactionforcesolver import reaction_force_solver
+from src.displacementfunction import displacement_y
 
 #Testing Load Cases
 theta = 28      # [degrees]
