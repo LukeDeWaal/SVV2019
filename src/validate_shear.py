@@ -1,7 +1,10 @@
 ##Imports
 import src.Structure as scr
 import numpy as np
+
+#import Shear_flow as sf
 import src.Shear_flow as sf
+
 
 
 ##Code
@@ -9,11 +12,12 @@ import src.Shear_flow as sf
 can be compared to the shear force in the analytical model"""
 
 def verify_shear(x_position):
-    """THis is the function which is called to give the shear in the section
+    """This is the function which is called to give the shear in the section
     it returns an array of the shear forces acting on a section
     Input: The x position in question
     """
-    shear_flows, __ = sf.shear_flow(x_position)
+    shear_flows, __ = sf.shear_flow(x_position, 1)
+    #shear_flows, __ = sf.test_cases(7)
     
     return main(x_position, shear_flows)
 
@@ -33,9 +37,10 @@ def main(x_position, shear_flows):
     shear_forces = np.sum(ordered_mat[:,-1])
     
     #print stuff
-    print("Shear in x is {:.3f} N".format(shear_forces[0]))
-    print("Shear in y is {:.3f} N".format(shear_forces[1]))
-    print("Shear in z is {:.3f} N".format(shear_forces[2]))
+    print("Shear in x is {} N".format(shear_forces[0]))
+    print("Shear in y is {} N".format(shear_forces[1]))
+    print("Shear in z is {} N".format(shear_forces[2]))
+
     
     return shear_forces
     
@@ -57,11 +62,14 @@ def order_data(shear_flows, booms):
         r_dir_vec = r_vec / length
         F_vec = length * r_dir_vec * shear_flows[i]
         mat[i] = np.array([boom0, boom1, shear_flows[i], length, r_dir_vec, F_vec])
+        #print(boom0.get_label(), boom1.get_label(), shear_flows[i], length, r_dir_vec, F_vec)
+
     #for the last row
     r_vec = booms[0].get_position() - booms[4].get_position()
     length = np.linalg.norm(r_vec)
     mat[-1] = np.array([booms[4], booms[0], shear_flows[-1], length, r_vec / length, shear_flows[-1] * r_vec])
     
-    return mat
+    return mat 
+
     
-verify_shear(0.95)
+#verify_shear(0.95)

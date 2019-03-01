@@ -4,6 +4,7 @@ Build the aileron structural idealization here (using skin, booms, etc)
 
 
 from src.Idealizations import Boom, StraightSkin
+#from Idealizations import Boom, StraightSkin
 import pylab as pl
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
@@ -15,7 +16,8 @@ import numpy as np
 
 #from NumericalTools import newtons_method, derive, pythagoras, coordinate_transformation
 
-from src.NumericalTools import newtons_method, derive, pythagoras, coordinate_transformation
+#from src.NumericalTools import newtons_method, derive, pythagoras, coordinate_transformation
+from NumericalTools import newtons_method, derive, pythagoras, coordinate_transformation
 
 pi = np.pi
 
